@@ -88,7 +88,7 @@
       <File Name="Generated_Code/PWM_Cadera_Flexion.c" FileDate="2016-11-14, 12:45:15" FileAge="1479149115114" FileType="45637" CompNumb="25" />
       <File Name="Generated_Code/TU1.c" FileDate="2016-11-16, 15:23:17" FileAge="1479331397147" FileType="45637" CompNumb="20" />
       <File Name="Documentation/doxygen/PwmLdd4.txt" FileDate="2016-11-15, 15:42:02" FileAge="1479246122349" FileType="45637" CompNumb="32" />
-      <File Name="Documentation/ProcessorExpert_SIGNALS.txt" FileDate="2016-11-16, 15:23:17" FileAge="1479331397877" FileType="3072" />
+      <File Name="Documentation/ProcessorExpert_SIGNALS.txt" FileDate="2016-11-18, 20:38:37" FileAge="1479523117757" FileType="3072" />
       <File Name="Generated_Code/BitIoLdd4.c" FileDate="2016-11-15, 16:45:15" FileAge="1479249915087" FileType="45637" CompNumb="37" />
       <File Name="Documentation/doxygen/BitIoLdd2.txt" FileDate="2016-11-14, 12:45:15" FileAge="1479149115193" FileType="45637" CompNumb="17" />
       <File Name="Generated_Code/BitIoLdd3.h" FileDate="2016-11-15, 16:45:15" FileAge="1479249915016" FileType="45637" CompNumb="35" />
@@ -110,11 +110,11 @@
       <File Name="Documentation/doxygen/BitIoLdd1.txt" FileDate="2016-11-14, 12:45:15" FileAge="1479149115321" FileType="45637" CompNumb="15" />
       <File Name="Generated_Code/PWM_Cadera_Aduccion.c" FileDate="2016-11-16, 15:23:17" FileAge="1479331397022" FileType="45637" CompNumb="27" />
       <File Name="Documentation/doxygen/BitIoLdd6.txt" FileDate="2016-11-15, 16:45:15" FileAge="1479249915233" FileType="45637" CompNumb="41" />
-      <File Name="Sources/ProcessorExpert.c" FileDate="2016-11-16, 15:23:17" FileAge="1479331397613" FileType="128" />
+      <File Name="Sources/ProcessorExpert.c" FileDate="2016-11-18, 20:22:18" FileAge="1479522138144" FileType="128" />
       <File Name="Generated_Code/PwmLdd4.h" FileDate="2016-11-15, 15:42:02" FileAge="1479246122268" FileType="45637" CompNumb="32" />
       <File Name="Generated_Code/PwmLdd4.c" FileDate="2016-11-15, 15:42:02" FileAge="1479246122284" FileType="45637" CompNumb="32" />
       <File Name="Generated_Code/PwmLdd3.h" FileDate="2016-11-16, 15:23:17" FileAge="1479331397049" FileType="45637" CompNumb="28" />
     </GeneratedByPE>
   </GeneratedFilesList>
-  <CodeGenReference>24</CodeGenReference>
+  <CodeGenReference>28</CodeGenReference>
 </CodeGenerationInfo>

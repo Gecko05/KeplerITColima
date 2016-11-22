@@ -90,7 +90,7 @@ float Gy[2];
 #define G_R 131.0
 #define pwmgm  0x6B;
 #define RAD_TO_DEG  57.295779
-int angulo[2];
+int angulo[4];
 char envio[3];
 
 
@@ -140,38 +140,41 @@ Articulacion Tobillo;
 			else{
 				S0_Rodilla_ClrVal();
 				S1_Rodilla_ClrVal();
+				orden_articulacion = 'N';
 			}
 			break;
 		case 'C':										//	C A D E R A		F L E X I O N
 			CaderaF.angulo_nuevo = angulo;
 			PWM_Cadera_Flexion_SetDutyUS(Baja);
 			if(CaderaF.angulo_nuevo>CaderaF.angulo_actual){
-				S0_Cadera_Aduccion_SetVal();
-				S1_Cadera_Aduccion_ClrVal();
-			}
-			else if(CaderaF.angulo_nuevo<CaderaF.angulo_actual){
-				S0_Cadera_Aduccion_ClrVal();
-				S1_Cadera_Aduccion_SetVal();
-			}
-			else{
-				S0_Cadera_Aduccion_ClrVal();
-				S1_Cadera_Aduccion_ClrVal();
-			}
-			break;
-		case 'A':										//	C A D E R A		A D U C C I O N
-			CaderaA.angulo_nuevo = angulo;
-			PWM_Cadera_Aduccion_SetDutyUS(Baja);
-			if(CaderaA.angulo_nuevo>CaderaA.angulo_actual){
 				S0_Cadera_Flexion_SetVal();
 				S1_Cadera_Flexion_ClrVal();
 			}
-			else if(CaderaA.angulo_nuevo<CaderaA.angulo_actual){
+			else if(CaderaF.angulo_nuevo<CaderaF.angulo_actual){
 				S0_Cadera_Flexion_ClrVal();
 				S1_Cadera_Flexion_SetVal();
 			}
 			else{
 				S0_Cadera_Flexion_ClrVal();
 				S1_Cadera_Flexion_ClrVal();
+				orden_articulacion = 'N';
+			}
+			break;
+		case 'A':										//	C A D E R A		A D U C C I O N
+			CaderaA.angulo_nuevo = angulo;
+			PWM_Cadera_Aduccion_SetDutyUS(Baja);
+			if(CaderaA.angulo_nuevo>CaderaA.angulo_actual){
+				S0_Cadera_Aduccion_SetVal();
+				S1_Cadera_Aduccion_ClrVal();
+			}
+			else if(CaderaA.angulo_nuevo<CaderaA.angulo_actual){
+				S0_Cadera_Aduccion_ClrVal();
+				S1_Cadera_Aduccion_SetVal();
+			}
+			else{
+				S0_Cadera_Aduccion_ClrVal();
+				S1_Cadera_Aduccion_ClrVal();
+				orden_articulacion = 'N';
 			}
 			break;
 		case 'T':										//	T O B I L L O
@@ -197,7 +200,43 @@ Articulacion Tobillo;
 	void actualizar_angulos(void){
 		//i2c();
 		//Rodilla.angulo_actual = angulo[0];
-		CaderaF.angulo_actual = angulo[0];
+		
+		//CaderaF.angulo_actual = angulo[0];
+		//Rodilla.angulo_actual = angulo[2];
+		/*
+		GI2C1_ReadAddress(0x68,&memAddr,1,&datoi2c[0],6);
+		//GI2C1_ReadByteAddress8(0x68,memAddr,&datoi2c[0]);
+		ax = ((datoi2c[0]<<8) | (datoi2c[1]));
+		ay = ((datoi2c[2]<<8) | (datoi2c[3]));
+		az = ((datoi2c[4]<<8) | (datoi2c[5]));
+		Acc[1] = atan(-1*(ax/A_R)/sqrt(powf((ay/A_R),2) + powf((az/A_R),2)))*RAD_TO_DEG;
+		Acc[0] = atan((ay/A_R)/sqrt(powf((ax/A_R),2) + powf((az/A_R),2)))*RAD_TO_DEG;
+		GI2C1_ReadAddress(0x68,&memAddr1,1,&datoi2c[0],4);
+		gx = ((datoi2c[0]<<8) | (datoi2c[1]));
+		gy = ((datoi2c[2]<<8) | (datoi2c[3]));
+		Gy[0] = gx/G_R;
+		Gy[1] = gy/G_R;
+		Angle[0] = 0.98 *(Angle[0]+Gy[0]*0.010) + 0.02*Acc[0];
+		Angle[1] = 0.98 *(Angle[1]+Gy[1]*0.010) + 0.02*Acc[1];
+		angulo[0] = Angle[0];
+		angulo[1] = Angle[1];		
+		*/
+		/*GI2C1_ReadAddress(0x69,&memAddr,1,&datoi2c[0],6);
+		//GI2C1_ReadByteAddress8(0x68,memAddr,&datoi2c[0]);
+		ax = ((datoi2c[0]<<8) | (datoi2c[1]));
+		ay = ((datoi2c[2]<<8) | (datoi2c[3]));
+		az = ((datoi2c[4]<<8) | (datoi2c[5]));
+		Acc[1] = atan(-1*(ax/A_R)/sqrt(powf((ay/A_R),2) + powf((az/A_R),2)))*RAD_TO_DEG;
+		Acc[0] = atan((ay/A_R)/sqrt(powf((ax/A_R),2) + powf((az/A_R),2)))*RAD_TO_DEG;
+		GI2C1_ReadAddress(0x69,&memAddr1,1,&datoi2c[0],4);
+		gx = ((datoi2c[0]<<8) | (datoi2c[1]));
+		gy = ((datoi2c[2]<<8) | (datoi2c[3]));
+		Gy[0] = gx/G_R;
+		Gy[1] = gy/G_R;
+		Angle[0] = 0.98 *(Angle[0]+Gy[0]*0.010) + 0.02*Acc[0];
+		Angle[1] = 0.98 *(Angle[1]+Gy[1]*0.010) + 0.02*Acc[1];
+		angulo[2] = Angle[0];
+		angulo[3] = Angle[1];*/
 	}
 
 /*
@@ -283,18 +322,20 @@ int main(void)
   DA1_Init(NULL);
   PWM_Tobillo_Disable();
   GI2C1_Init();
-  GI2C1_WriteByteAddress8(0x68,0x6B,0);
   PWM_Tobillo_Enable();
-  //S1_Cadera_Flexion_SetVal();
+ // S1_Cadera_Flexion_SetVal();
   //S0_Cadera_Flexion_ClrVal();
-  S1_Cadera_Aduccion_SetVal();
-  S0_Cadera_Aduccion_ClrVal();
+  //S1_Cadera_Aduccion_SetVal();
+  //S0_Cadera_Aduccion_ClrVal();
   PWM_Cadera_Aduccion_SetDutyUS(19999);
   PWM_Cadera_Flexion_SetDutyUS(19999);
   PWM_Rodilla_SetDutyUS(19999);
+  //GI2C1_WriteByteAddress8(0x68,0x6B,0);
+  //GI2C1_WriteByteAddress8(0x69,0x6B,0);
   for(;;){
+	  
 	  while(MODO==AJUSTE){
-		  actualizar_angulos();
+		  //actualizar_angulos();
 		  if(orden_modo=='X'){
 			  captura_maximo(orden_articulacion);
 		  }
@@ -305,33 +346,7 @@ int main(void)
 /*#######################################################
  * 
  */
-			GI2C1_ReadAddress(0x68,&memAddr,1,&datoi2c[0],6);
-			//GI2C1_ReadByteAddress8(0x68,memAddr,&datoi2c[0]);
-			ax = ((datoi2c[0]<<8) | (datoi2c[1]));
-			ay = ((datoi2c[2]<<8) | (datoi2c[3]));
-			az = ((datoi2c[4]<<8) | (datoi2c[5]));
-			Acc[1] = atan(-1*(ax/A_R)/sqrt(powf((ay/A_R),2) + powf((az/A_R),2)))*RAD_TO_DEG;
-			Acc[0] = atan((ay/A_R)/sqrt(powf((ax/A_R),2) + powf((az/A_R),2)))*RAD_TO_DEG;
-			GI2C1_ReadAddress(0x68,&memAddr1,1,&datoi2c[0],4);
-			gx = ((datoi2c[0]<<8) | (datoi2c[1]));
-			gy = ((datoi2c[2]<<8) | (datoi2c[3]));
-			Gy[0] = gx/G_R;
-			Gy[1] = gy/G_R;
-			Angle[0] = 0.98 *(Angle[0]+Gy[0]*0.010) + 0.02*Acc[0];
-			Angle[1] = 0.98 *(Angle[1]+Gy[1]*0.010) + 0.02*Acc[1];
-			angulo[0] = Angle[0];
-			angulo[1] = Angle[1];
-			/*#######################################################
-			 * 
-			 */
-			/*envio[0] = ((angulo[0])/100)%10;
-			envio[1] = ((angulo[0])/10)%10;
-			envio[2] = ((angulo[0])/1)%10;
-			AS1_SendChar(envio[2]);
-			AS1_SendChar(envio[1]);
-			AS1_SendChar(envio[0]);
-			AS1_SendChar('c');
-			AS1_SendChar('\n');*/
+
 	  }
 	  while(MODO==RUTINA){
 		  

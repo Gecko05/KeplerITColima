@@ -60,6 +60,7 @@
 #include "GI2C1.h"
 #include "I2C1.h"
 #include "DA1.h"
+#include "CS1.h"
 #include "TI1.h"
 #include "TimerIntLdd1.h"
 #include "TU3.h"
@@ -71,26 +72,32 @@
 #include "Math.h"
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
-#define Baja 1
+#define Baja 16000
 #define Media 2
 #define Alta 3
 
-volatile char orden_articulacion;
-volatile char orden_modo;					
-volatile int orden_angulo;
+int bandera = 0;
+
+char orden_articulacion;
+char orden_modo;					
+int orden_angulo;
+
+volatile bandera_actualizar;
 
 byte datoi2c[6];
-int gx,gy,ax,ay,az;
+int16 gx,gy,ax,ay,az,gz;
 byte memAddr = 0x3B;
 byte memAddr1 = 0x43;
 float Acc[2];
-float Angle[2];
 float Gy[2];
+float Angle[4];
+int angulo[4];
+volatile char orden[5];
 #define A_R 16384.0
 #define G_R 131.0
 #define pwmgm  0x6B;
 #define RAD_TO_DEG  57.295779
-int angulo[4];
+
 char envio[3];
 
 
@@ -144,13 +151,14 @@ Articulacion Tobillo;
 			}
 			break;
 		case 'C':										//	C A D E R A		F L E X I O N
+			//CaderaF.angulo_nuevo = (angulo*(float)(2/3))-60;
 			CaderaF.angulo_nuevo = angulo;
 			PWM_Cadera_Flexion_SetDutyUS(Baja);
-			if(CaderaF.angulo_nuevo>CaderaF.angulo_actual){
+			if(CaderaF.angulo_nuevo<CaderaF.angulo_actual){
 				S0_Cadera_Flexion_SetVal();
 				S1_Cadera_Flexion_ClrVal();
 			}
-			else if(CaderaF.angulo_nuevo<CaderaF.angulo_actual){
+			else if(CaderaF.angulo_nuevo>CaderaF.angulo_actual){
 				S0_Cadera_Flexion_ClrVal();
 				S1_Cadera_Flexion_SetVal();
 			}
@@ -198,45 +206,50 @@ Articulacion Tobillo;
 ** ===================================================================
 */
 	void actualizar_angulos(void){
-		//i2c();
+		
 		//Rodilla.angulo_actual = angulo[0];
 		
 		//CaderaF.angulo_actual = angulo[0];
 		//Rodilla.angulo_actual = angulo[2];
-		/*
+		if(bandera_actualizar == 1){
 		GI2C1_ReadAddress(0x68,&memAddr,1,&datoi2c[0],6);
 		//GI2C1_ReadByteAddress8(0x68,memAddr,&datoi2c[0]);
 		ax = ((datoi2c[0]<<8) | (datoi2c[1]));
 		ay = ((datoi2c[2]<<8) | (datoi2c[3]));
 		az = ((datoi2c[4]<<8) | (datoi2c[5]));
-		Acc[1] = atan(-1*(ax/A_R)/sqrt(powf((ay/A_R),2) + powf((az/A_R),2)))*RAD_TO_DEG;
-		Acc[0] = atan((ay/A_R)/sqrt(powf((ax/A_R),2) + powf((az/A_R),2)))*RAD_TO_DEG;
-		GI2C1_ReadAddress(0x68,&memAddr1,1,&datoi2c[0],4);
+		Acc[1] = atan(-1*(az/A_R)/sqrt(powf((ay/A_R),2) + powf((ax/A_R),2)))*RAD_TO_DEG;
+		Acc[0] = atan((ay/A_R)/sqrt(powf((az/A_R),2) + powf((ax/A_R),2)))*RAD_TO_DEG;
+		GI2C1_ReadAddress(0x68,&memAddr1,1,&datoi2c[0],6);
 		gx = ((datoi2c[0]<<8) | (datoi2c[1]));
 		gy = ((datoi2c[2]<<8) | (datoi2c[3]));
-		Gy[0] = gx/G_R;
+		gz = ((datoi2c[4]<<8) | (datoi2c[5]));
+		Gy[0] = gz/G_R;
 		Gy[1] = gy/G_R;
-		Angle[0] = 0.98 *(Angle[0]+Gy[0]*0.010) + 0.02*Acc[0];
-		Angle[1] = 0.98 *(Angle[1]+Gy[1]*0.010) + 0.02*Acc[1];
+		Angle[0] = 0.98 *(Angle[0]+Gy[0]*0.02) + 0.02*Acc[0];
+		Angle[1] = 0.98 *(Angle[1]+Gy[1]*0.02) + 0.02*Acc[1];
 		angulo[0] = Angle[0];
-		angulo[1] = Angle[1];		
-		*/
-		/*GI2C1_ReadAddress(0x69,&memAddr,1,&datoi2c[0],6);
+		angulo[1] = Angle[1];	
+		}
+		bandera_actualizar = 0;
+		
+		GI2C1_ReadAddress(0x69,&memAddr,1,&datoi2c[0],6);
 		//GI2C1_ReadByteAddress8(0x68,memAddr,&datoi2c[0]);
 		ax = ((datoi2c[0]<<8) | (datoi2c[1]));
 		ay = ((datoi2c[2]<<8) | (datoi2c[3]));
 		az = ((datoi2c[4]<<8) | (datoi2c[5]));
-		Acc[1] = atan(-1*(ax/A_R)/sqrt(powf((ay/A_R),2) + powf((az/A_R),2)))*RAD_TO_DEG;
-		Acc[0] = atan((ay/A_R)/sqrt(powf((ax/A_R),2) + powf((az/A_R),2)))*RAD_TO_DEG;
-		GI2C1_ReadAddress(0x69,&memAddr1,1,&datoi2c[0],4);
+		Acc[1] = atan(-1*(az/A_R)/sqrt(powf((ay/A_R),2) + powf((ax/A_R),2)))*RAD_TO_DEG;
+		Acc[0] = atan((ay/A_R)/sqrt(powf((az/A_R),2) + powf((ax/A_R),2)))*RAD_TO_DEG;
+		GI2C1_ReadAddress(0x69,&memAddr1,1,&datoi2c[0],6);
 		gx = ((datoi2c[0]<<8) | (datoi2c[1]));
 		gy = ((datoi2c[2]<<8) | (datoi2c[3]));
-		Gy[0] = gx/G_R;
+		gz = ((datoi2c[4]<<8) | (datoi2c[5]));
+		Gy[0] = gz/G_R;
 		Gy[1] = gy/G_R;
-		Angle[0] = 0.98 *(Angle[0]+Gy[0]*0.010) + 0.02*Acc[0];
-		Angle[1] = 0.98 *(Angle[1]+Gy[1]*0.010) + 0.02*Acc[1];
-		angulo[2] = Angle[0];
-		angulo[3] = Angle[1];*/
+		Angle[2] = 0.98 *(Angle[2]+Gy[0]*0.010) + 0.02*Acc[0];
+		Angle[3] = 0.98 *(Angle[3]+Gy[1]*0.010) + 0.02*Acc[1];
+		angulo[2] = Angle[2];
+		angulo[3] = Angle[3];
+		CaderaF.angulo_actual = angulo[0];
 	}
 
 /*
@@ -300,6 +313,26 @@ Articulacion Tobillo;
 	}
 	
 	
+void tipo_orden(void){
+	orden_modo = orden[0];
+	orden_articulacion = orden[1];
+	orden_angulo = ((orden[2]-'0')*100) + ((orden[3]-'0')*10)+((orden[4]-'0'));
+	switch(orden_modo){
+	case 'A':
+		MODO = AJUSTE;
+		break;
+	case 'R':
+		MODO = RUTINA;
+		break;
+	case 'B':
+		S0_Cadera_Flexion_ClrVal();
+		S1_Cadera_Flexion_ClrVal();
+		break;
+	}
+}
+	
+	
+	
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
 int main(void)
 /*lint -restore Enable MISRA rule (6.3) checking. */
@@ -308,6 +341,7 @@ int main(void)
 	Rodilla.angulo_actual = 50;
 	CaderaF.angulo_actual = 50;
 	CaderaA.angulo_actual = 50;
+	Tobillo.angulo_actual = 40;
 	//Rodilla.angulo_nuevo = 0;
 	
 	
@@ -320,22 +354,25 @@ int main(void)
    * ########################################################################################################################
    */
   DA1_Init(NULL);
-  PWM_Tobillo_Disable();
   GI2C1_Init();
-  PWM_Tobillo_Enable();
  // S1_Cadera_Flexion_SetVal();
   //S0_Cadera_Flexion_ClrVal();
   //S1_Cadera_Aduccion_SetVal();
   //S0_Cadera_Aduccion_ClrVal();
+
   PWM_Cadera_Aduccion_SetDutyUS(19999);
-  PWM_Cadera_Flexion_SetDutyUS(19999);
+  PWM_Cadera_Flexion_SetDutyUS(20000);
+  //PWM_Cadera_Flexion_Disable();PWM_Cadera_Aduccion_Disable();PWM_Rodilla_Disable();
   PWM_Rodilla_SetDutyUS(19999);
-  //GI2C1_WriteByteAddress8(0x68,0x6B,0);
-  //GI2C1_WriteByteAddress8(0x69,0x6B,0);
+  PWM_Tobillo_SetDutyUS(18000);
+  GI2C1_WriteByteAddress8(0x68,0x6B,0);
+  GI2C1_WriteByteAddress8(0x69,0x6B,0);
   for(;;){
-	  
+	  actualizar_angulos();
+	  tipo_orden();
 	  while(MODO==AJUSTE){
-		  //actualizar_angulos();
+		  tipo_orden();
+		  actualizar_angulos();
 		  if(orden_modo=='X'){
 			  captura_maximo(orden_articulacion);
 		  }

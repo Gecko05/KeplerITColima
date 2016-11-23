@@ -6,7 +6,7 @@
 **     Component   : PWM_LDD
 **     Version     : Component 01.013, Driver 01.03, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-16, 15:22, # CodeGen: 23
+**     Date/Time   : 2016-11-22, 01:01, # CodeGen: 30
 **     Abstract    :
 **          This component implements a pulse-width modulation generator
 **          that generates signal with variable duty and fixed cycle.
@@ -42,6 +42,8 @@
 **            Linked component                             : TU1
 **     Contents    :
 **         Init       - LDD_TDeviceData* PwmLdd3_Init(LDD_TUserData *UserDataPtr);
+**         Enable     - LDD_TError PwmLdd3_Enable(LDD_TDeviceData *DeviceDataPtr);
+**         Disable    - LDD_TError PwmLdd3_Disable(LDD_TDeviceData *DeviceDataPtr);
 **         SetRatio16 - LDD_TError PwmLdd3_SetRatio16(LDD_TDeviceData *DeviceDataPtr, uint16_t Ratio);
 **         SetDutyUS  - LDD_TError PwmLdd3_SetDutyUS(LDD_TDeviceData *DeviceDataPtr, uint16_t Time);
 **         SetDutyMS  - LDD_TError PwmLdd3_SetDutyMS(LDD_TDeviceData *DeviceDataPtr, uint16_t Time);
@@ -99,6 +101,8 @@ extern "C" {
 
 /* Methods configuration constants - generated for all enabled component's methods */
 #define PwmLdd3_Init_METHOD_ENABLED    /*!< Init method of the component PwmLdd3 is enabled (generated) */
+#define PwmLdd3_Enable_METHOD_ENABLED  /*!< Enable method of the component PwmLdd3 is enabled (generated) */
+#define PwmLdd3_Disable_METHOD_ENABLED /*!< Disable method of the component PwmLdd3 is enabled (generated) */
 #define PwmLdd3_SetRatio16_METHOD_ENABLED /*!< SetRatio16 method of the component PwmLdd3 is enabled (generated) */
 #define PwmLdd3_SetDutyUS_METHOD_ENABLED /*!< SetDutyUS method of the component PwmLdd3 is enabled (generated) */
 #define PwmLdd3_SetDutyMS_METHOD_ENABLED /*!< SetDutyMS method of the component PwmLdd3 is enabled (generated) */
@@ -132,6 +136,46 @@ extern "C" {
 */
 /* ===================================================================*/
 LDD_TDeviceData* PwmLdd3_Init(LDD_TUserData *UserDataPtr);
+
+/*
+** ===================================================================
+**     Method      :  PwmLdd3_Enable (component PWM_LDD)
+*/
+/*!
+**     @brief
+**         Enables the component - it starts the signal generation.
+**         Events may be generated (see SetEventMask).
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError PwmLdd3_Enable(LDD_TDeviceData *DeviceDataPtr);
+
+/*
+** ===================================================================
+**     Method      :  PwmLdd3_Disable (component PWM_LDD)
+*/
+/*!
+**     @brief
+**         Disables the component - it stops signal generation and
+**         events calling.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError PwmLdd3_Disable(LDD_TDeviceData *DeviceDataPtr);
 
 /*
 ** ===================================================================

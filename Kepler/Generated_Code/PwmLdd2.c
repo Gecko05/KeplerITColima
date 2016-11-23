@@ -6,7 +6,7 @@
 **     Component   : PWM_LDD
 **     Version     : Component 01.013, Driver 01.03, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-14, 12:44, # CodeGen: 7
+**     Date/Time   : 2016-11-22, 01:01, # CodeGen: 30
 **     Abstract    :
 **          This component implements a pulse-width modulation generator
 **          that generates signal with variable duty and fixed cycle.
@@ -42,6 +42,8 @@
 **            Linked component                             : TU1
 **     Contents    :
 **         Init       - LDD_TDeviceData* PwmLdd2_Init(LDD_TUserData *UserDataPtr);
+**         Enable     - LDD_TError PwmLdd2_Enable(LDD_TDeviceData *DeviceDataPtr);
+**         Disable    - LDD_TError PwmLdd2_Disable(LDD_TDeviceData *DeviceDataPtr);
 **         SetRatio16 - LDD_TError PwmLdd2_SetRatio16(LDD_TDeviceData *DeviceDataPtr, uint16_t Ratio);
 **         SetDutyUS  - LDD_TError PwmLdd2_SetDutyUS(LDD_TDeviceData *DeviceDataPtr, uint16_t Time);
 **         SetDutyMS  - LDD_TError PwmLdd2_SetDutyMS(LDD_TDeviceData *DeviceDataPtr, uint16_t Time);
@@ -135,6 +137,65 @@ LDD_TDeviceData* PwmLdd2_Init(LDD_TUserData *UserDataPtr)
     return NULL;                       /* If so, then the PWM initialization is also unsuccessful */
   }
   return ((LDD_TDeviceData *)DeviceDataPrv); /* Return pointer to the device data structure */
+}
+
+/*
+** ===================================================================
+**     Method      :  PwmLdd2_Enable (component PWM_LDD)
+*/
+/*!
+**     @brief
+**         Enables the component - it starts the signal generation.
+**         Events may be generated (see SetEventMask).
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError PwmLdd2_Enable(LDD_TDeviceData *DeviceDataPtr)
+{
+  PwmLdd2_TDeviceData *DeviceDataPrv = (PwmLdd2_TDeviceData *)DeviceDataPtr;
+
+  if (!DeviceDataPrv->EnUser) {        /* Is the device disabled by user? */
+    DeviceDataPrv->EnUser = TRUE;      /* If yes then set the flag "device enabled" */
+    (void)TU1_Enable(DeviceDataPrv->LinkedDeviceDataPtr); /* Enable TimerUnit */
+  }
+  return ERR_OK;
+}
+
+/*
+** ===================================================================
+**     Method      :  PwmLdd2_Disable (component PWM_LDD)
+*/
+/*!
+**     @brief
+**         Disables the component - it stops signal generation and
+**         events calling.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError PwmLdd2_Disable(LDD_TDeviceData *DeviceDataPtr)
+{
+  PwmLdd2_TDeviceData *DeviceDataPrv = (PwmLdd2_TDeviceData *)DeviceDataPtr;
+
+  if (DeviceDataPrv->EnUser) {         /* Is the device enabled by user? */
+    DeviceDataPrv->EnUser = FALSE;     /* If yes then set the flag "device enabled" */
+   (void)TU1_Disable(DeviceDataPrv->LinkedDeviceDataPtr); /* Disable TimerUnit component */
+   (void)TU1_ResetCounter(DeviceDataPrv->LinkedDeviceDataPtr); /* Reset counter */
+  }
+  return ERR_OK;
 }
 
 /*

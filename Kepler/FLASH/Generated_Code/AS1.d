@@ -73,6 +73,7 @@ Generated_Code/AS1.o: ../Generated_Code/AS1.c \
  C:/Users/LENOVO/JaimeWorkspace/Kepler/Generated_Code/I2C1.h \
  C:/Users/LENOVO/JaimeWorkspace/Kepler/Generated_Code/DA1.h \
  C:/Freescale/CW\ MCU\ v10.5/MCU/ProcessorExpert/lib/Kinetis/pdd/inc/DAC_PDD.h \
+ C:/Users/LENOVO/JaimeWorkspace/Kepler/Generated_Code/CS1.h \
  C:/Users/LENOVO/JaimeWorkspace/Kepler/Generated_Code/TI1.h \
  C:/Users/LENOVO/JaimeWorkspace/Kepler/Generated_Code/TimerIntLdd1.h \
  C:/Users/LENOVO/JaimeWorkspace/Kepler/Generated_Code/TU3.h \
@@ -232,6 +233,8 @@ C:/Users/LENOVO/JaimeWorkspace/Kepler/Generated_Code/I2C1.h:
 C:/Users/LENOVO/JaimeWorkspace/Kepler/Generated_Code/DA1.h:
 
 C:/Freescale/CW\ MCU\ v10.5/MCU/ProcessorExpert/lib/Kinetis/pdd/inc/DAC_PDD.h:
+
+C:/Users/LENOVO/JaimeWorkspace/Kepler/Generated_Code/CS1.h:
 
 C:/Users/LENOVO/JaimeWorkspace/Kepler/Generated_Code/TI1.h:
 

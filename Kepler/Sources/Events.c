@@ -36,18 +36,13 @@ extern "C" {
 
 AS1_TComData orden[5];
 word rcv;
-char orden_articulacion;
-char orden_modo;
-int orden_angulo;
+
+int bandera_actualizar;
 
 LDD_DAC_TData onda[15] = {2048, 2880, 3569, 3995, 4084, 3821, 3251, 2473, 1622, 844, 274, 11, 100, 526, 1215};
 int n,m;
 	
-enum MODOS{
-	AJUSTE,
-	RUTINA
-};
-enum MODOS MODO;
+
 
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
@@ -140,20 +135,9 @@ void AS1_OnTxChar(void)
 ** ===================================================================
 */
 void AS1_OnFullRxBuf(void)
-{
+{	
 	AS1_RecvBlock(&orden[0],5,&rcv);
-	orden_modo = orden[0];
-	orden_articulacion = orden[1];
-	orden_angulo = ((orden[2]-'0')*100) + ((orden[3]-'0')*10)+((orden[4]-'0'));
-	switch(orden_modo){
-	case 'A':
-		MODO = AJUSTE;
-		break;
-	case 'R':
-		MODO = RUTINA;
-		break;
-	}
-
+	//############################################################################
 }
 
 /*
@@ -172,7 +156,7 @@ void AS1_OnFullRxBuf(void)
 */
 void TI1_OnInterrupt(void)
 {
-	n++;
+	/*n++;
 	m++;
 	if(m<366){
 		if(n>14){
@@ -185,7 +169,7 @@ void TI1_OnInterrupt(void)
 	}
 	else{
 		m=0;
-	}
+	}*/
 	
 }
 
@@ -208,6 +192,52 @@ void TI1_OnInterrupt(void)
 **                           the parameter of Init method.
 */
 /* ===================================================================*/
+
+
+/*
+** ===================================================================
+**     Event       :  PWM_Tobillo_OnEnd (module Events)
+**
+**     Component   :  PWM_Tobillo [PWM]
+**     Description :
+**         This event is called when the specified number of cycles has
+**         been generated. (Only when the component is enabled -
+**         <Enable> and the events are enabled - <EnableEvent>). The
+**         event is available only when the <Interrupt service/event>
+**         property is enabled and selected peripheral supports
+**         appropriate interrupt.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void PWM_Tobillo_OnEnd(void)
+{
+	bandera_actualizar = 1;
+}
+
+/*
+** ===================================================================
+**     Event       :  TU2_OnChannel1 (module Events)
+**
+**     Component   :  TU2 [TimerUnit_LDD]
+*/
+/*!
+**     @brief
+**         Called if compare register match the counter registers or
+**         capture register has a new content. OnChannel1 event and
+**         Timer unit must be enabled. See [SetEventMask] and
+**         [GetEventMask] methods. This event is available only if a
+**         [Interrupt] is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. The pointer passed as
+**                           the parameter of Init method.
+*/
+/* ===================================================================*/
+void TU2_OnChannel1(LDD_TUserData *UserDataPtr)
+{
+  /* Write your code here ... */
+}
 
 
 /* END Events */

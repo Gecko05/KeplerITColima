@@ -6,7 +6,7 @@
 **     Component   : PWM
 **     Version     : Component 02.240, Driver 01.01, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-15, 15:41, # CodeGen: 16
+**     Date/Time   : 2016-11-22, 05:42, # CodeGen: 32
 **     Abstract    :
 **         This component implements a pulse-width modulation generator
 **         that generates signal with variable duty and fixed cycle. 
@@ -26,7 +26,11 @@
 **         Compare register            : TPM1_C0V  [0x40039010]
 **         Flip-flop register          : TPM1_C0SC [0x4003900C]
 **
-**         User handling procedure     : not specified
+**         Interrupt name              : INT_TPM1
+**         Interrupt enable reg.       : TPM1_C1SC [0x40039014]
+**         Priority                    : 2
+**         User handling procedure     : PWM_Tobillo_OnEnd
+**         This event is called when the 1 of cycles is generated
 **
 **         Port name                   : PTE
 **         Bit number (in port)        : 20
@@ -44,9 +48,9 @@
 **           Initial value of            period     pulse width
 **             Xtal ticks              : ---        ---
 **             microseconds            : ---        ---
-**             milliseconds            : 20         10
+**             milliseconds            : 20         1
 **             seconds                 : ---        ---
-**             seconds (real)          : 20         10
+**             seconds (real)          : 20         1
 **
 **     Contents    :
 **         Enable     - byte PWM_Tobillo_Enable(void);
@@ -96,6 +100,16 @@ extern "C" {
 #define PWM_Tobillo_PERIOD_VALUE PwmLdd4_PERIOD_VALUE /* Initial period value in ticks of the timer. It is available only if the bean is enabled in high speed mode. */
 #define PWM_Tobillo_PERIOD_VALUE_HIGH PwmLdd4_PERIOD_VALUE_0 /* Period value in ticks of the timer in high speed mode. It is available only if the bean is enabled in high speed mode. */
 
+
+/*
+** ===================================================================
+**     Method      :  PWM_Tobillo_OnEnd (component PWM)
+**
+**     Description :
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+void PwmLdd4_OnEnd(LDD_TUserData *UserDataPtr);
 
 /*
 ** ===================================================================

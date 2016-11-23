@@ -6,7 +6,7 @@
 **     Component   : TimerUnit_LDD
 **     Version     : Component 01.158, Driver 01.11, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-15, 15:41, # CodeGen: 16
+**     Date/Time   : 2016-11-22, 05:42, # CodeGen: 32
 **     Abstract    :
 **          This TimerUnit component provides a low level API for unified hardware access across
 **          various timer devices using the Prescaler-Counter-Compare-Capture timer structure.
@@ -22,25 +22,35 @@
 **          Counter restart                                : On-match
 **            Period device                                : TPM1_MOD
 **            Period                                       : 20 ms
-**            Interrupt                                    : Disabled
-**          Channel list                                   : 1
+**            Interrupt                                    : Enabled
+**              Interrupt                                  : INT_TPM1
+**              Interrupt priority                         : medium priority
+**          Channel list                                   : 2
 **            Channel 0                                    : 
 **              Mode                                       : Compare
 **                Compare                                  : TPM1_C0V
-**                Offset                                   : 10 ms
+**                Offset                                   : 1 ms
 **                Output on compare                        : Set
 **                  Output on overrun                      : Clear
 **                  Initial state                          : Low
 **                  Output pin                             : LCD_P59/ADC0_DP0/ADC0_SE0/PTE20/TPM1_CH0/UART0_TX
 **                  Output pin signal                      : 
 **                Interrupt                                : Disabled
+**            Channel 1                                    : 
+**              Mode                                       : Compare
+**                Compare                                  : TPM1_C1V
+**                Offset                                   : 40 ms
+**                Output on compare                        : Disconnect
+**                Interrupt                                : Enabled
+**                  Interrupt                              : INT_TPM1
+**                  Interrupt priority                     : medium priority
 **          Initialization                                 : 
 **            Enabled in init. code                        : yes
 **            Auto initialization                          : no
 **            Event mask                                   : 
-**              OnCounterRestart                           : Disabled
+**              OnCounterRestart                           : Enabled
 **              OnChannel0                                 : Disabled
-**              OnChannel1                                 : Disabled
+**              OnChannel1                                 : Enabled
 **              OnChannel2                                 : Disabled
 **              OnChannel3                                 : Disabled
 **              OnChannel4                                 : Disabled
@@ -109,14 +119,15 @@ extern "C" {
 #define __BWUserType_TU2_TValueType
   typedef uint16_t TU2_TValueType ;    /* Type for data parameters of methods */
 #endif
-#define TU2_CNT_INP_FREQ_U_0 0x00280000UL /* Counter input frequency in Hz */
-#define TU2_CNT_INP_FREQ_R_0 2621438.120953155F /* Counter input frequency in Hz */
+#define TU2_CNT_INP_FREQ_U_0 0x00140000UL /* Counter input frequency in Hz */
+#define TU2_CNT_INP_FREQ_R_0 1310720.778463285F /* Counter input frequency in Hz */
 #define TU2_CNT_INP_FREQ_COUNT 0U      /* Count of predefined counter input frequencies */
-#define TU2_PERIOD_TICKS   0xCCCDUL    /* Initialization value of period in 'counter ticks' */
-#define TU2_NUMBER_OF_CHANNELS 0x01U   /* Count of predefined channels */
+#define TU2_PERIOD_TICKS   0x6666UL    /* Initialization value of period in 'counter ticks' */
+#define TU2_NUMBER_OF_CHANNELS 0x02U   /* Count of predefined channels */
 #define TU2_COUNTER_WIDTH  0x10U       /* Counter width in bits  */
 #define TU2_COUNTER_DIR    DIR_UP      /* Direction of counting */
-#define TU2_OFFSET_0_TICKS 0x6666ul    /* Initialization value of offset as 'counter ticks' for channel 0 */
+#define TU2_OFFSET_0_TICKS 0x051Ful    /* Initialization value of offset as 'counter ticks' for channel 0 */
+#define TU2_OFFSET_1_TICKS 0xCCCDul    /* Initialization value of offset as 'counter ticks' for channel 1 */
 /*! Peripheral base address of a device allocated by the component. This constant can be used directly in PDD macros. */
 #define TU2_PRPH_BASE_ADDRESS  0x40039000U
   
@@ -132,6 +143,8 @@ extern "C" {
 #define TU2_SelectOutputAction_METHOD_ENABLED /*!< SelectOutputAction method of the component TU2 is enabled (generated) */
 
 /* Events configuration constants - generated for all enabled component's events */
+#define TU2_OnCounterRestart_EVENT_ENABLED /*!< OnCounterRestart event of the component TU2 is enabled (generated) */
+#define TU2_OnChannel1_EVENT_ENABLED   /*!< OnChannel1 event of the component TU2 is enabled (generated) */
 
 
 
@@ -371,6 +384,19 @@ LDD_TError TU2_GetOffsetTicks(LDD_TDeviceData *DeviceDataPtr, uint8_t ChannelIdx
 */
 /* ===================================================================*/
 LDD_TError TU2_SelectOutputAction(LDD_TDeviceData *DeviceDataPtr, uint8_t ChannelIdx, LDD_TimerUnit_TOutAction CompareAction, LDD_TimerUnit_TOutAction CounterAction);
+
+/*
+** ===================================================================
+**     Method      :  TU2_Interrupt (component TimerUnit_LDD)
+**
+**     Description :
+**         The method services the interrupt of the selected peripheral(s)
+**         and eventually invokes event(s) of the component.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+/* {Default RTOS Adapter} ISR function prototype */
+PE_ISR(TU2_Interrupt);
 
 /* END TU2. */
 

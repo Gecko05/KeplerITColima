@@ -6,7 +6,7 @@
 **     Component   : TimerUnit_LDD
 **     Version     : Component 01.158, Driver 01.11, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-16, 15:22, # CodeGen: 23
+**     Date/Time   : 2016-11-22, 01:01, # CodeGen: 30
 **     Abstract    :
 **          This TimerUnit component provides a low level API for unified hardware access across
 **          various timer devices using the Prescaler-Counter-Compare-Capture timer structure.
@@ -78,7 +78,10 @@
 **            Clock configuration 7                        : This component disabled
 **     Contents    :
 **         Init               - LDD_TDeviceData* TU1_Init(LDD_TUserData *UserDataPtr);
+**         Enable             - LDD_TError TU1_Enable(LDD_TDeviceData *DeviceDataPtr);
+**         Disable            - LDD_TError TU1_Disable(LDD_TDeviceData *DeviceDataPtr);
 **         GetPeriodTicks     - LDD_TError TU1_GetPeriodTicks(LDD_TDeviceData *DeviceDataPtr, TU1_TValueType...
+**         ResetCounter       - LDD_TError TU1_ResetCounter(LDD_TDeviceData *DeviceDataPtr);
 **         GetCounterValue    - TU1_TValueType TU1_GetCounterValue(LDD_TDeviceData *DeviceDataPtr);
 **         SetOffsetTicks     - LDD_TError TU1_SetOffsetTicks(LDD_TDeviceData *DeviceDataPtr, uint8_t...
 **         GetOffsetTicks     - LDD_TError TU1_GetOffsetTicks(LDD_TDeviceData *DeviceDataPtr, uint8_t...
@@ -141,7 +144,10 @@ extern "C" {
   
 /* Methods configuration constants - generated for all enabled component's methods */
 #define TU1_Init_METHOD_ENABLED        /*!< Init method of the component TU1 is enabled (generated) */
+#define TU1_Enable_METHOD_ENABLED      /*!< Enable method of the component TU1 is enabled (generated) */
+#define TU1_Disable_METHOD_ENABLED     /*!< Disable method of the component TU1 is enabled (generated) */
 #define TU1_GetPeriodTicks_METHOD_ENABLED /*!< GetPeriodTicks method of the component TU1 is enabled (generated) */
+#define TU1_ResetCounter_METHOD_ENABLED /*!< ResetCounter method of the component TU1 is enabled (generated) */
 #define TU1_GetCounterValue_METHOD_ENABLED /*!< GetCounterValue method of the component TU1 is enabled (generated) */
 #define TU1_SetOffsetTicks_METHOD_ENABLED /*!< SetOffsetTicks method of the component TU1 is enabled (generated) */
 #define TU1_GetOffsetTicks_METHOD_ENABLED /*!< GetOffsetTicks method of the component TU1 is enabled (generated) */
@@ -179,6 +185,48 @@ LDD_TDeviceData* TU1_Init(LDD_TUserData *UserDataPtr);
 
 /*
 ** ===================================================================
+**     Method      :  TU1_Enable (component TimerUnit_LDD)
+*/
+/*!
+**     @brief
+**         Enables the component - it starts the signal generation.
+**         Events may be generated (see SetEventMask). The method is
+**         not available if the counter can't be disabled/enabled by HW.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError TU1_Enable(LDD_TDeviceData *DeviceDataPtr);
+
+/*
+** ===================================================================
+**     Method      :  TU1_Disable (component TimerUnit_LDD)
+*/
+/*!
+**     @brief
+**         Disables the component - it stops signal generation and
+**         events calling. The method is not available if the counter
+**         can't be disabled/enabled by HW.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError TU1_Disable(LDD_TDeviceData *DeviceDataPtr);
+
+/*
+** ===================================================================
 **     Method      :  TU1_GetPeriodTicks (component TimerUnit_LDD)
 */
 /*!
@@ -202,6 +250,29 @@ LDD_TDeviceData* TU1_Init(LDD_TUserData *UserDataPtr);
 */
 /* ===================================================================*/
 LDD_TError TU1_GetPeriodTicks(LDD_TDeviceData *DeviceDataPtr, TU1_TValueType *TicksPtr);
+
+/*
+** ===================================================================
+**     Method      :  TU1_ResetCounter (component TimerUnit_LDD)
+*/
+/*!
+**     @brief
+**         Resets counter. If counter is counting up then it is set to
+**         zero. If counter is counting down then counter is updated to
+**         the reload value.
+**         The method is not available if HW doesn't allow resetting of
+**         the counter.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by [Init] method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK 
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError TU1_ResetCounter(LDD_TDeviceData *DeviceDataPtr);
 
 /*
 ** ===================================================================

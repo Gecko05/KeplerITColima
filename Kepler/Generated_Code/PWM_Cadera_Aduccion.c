@@ -6,7 +6,7 @@
 **     Component   : PWM
 **     Version     : Component 02.240, Driver 01.01, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-16, 15:22, # CodeGen: 23
+**     Date/Time   : 2016-11-22, 01:01, # CodeGen: 30
 **     Abstract    :
 **         This component implements a pulse-width modulation generator
 **         that generates signal with variable duty and fixed cycle. 
@@ -49,6 +49,8 @@
 **             seconds (real)          : 20         2
 **
 **     Contents    :
+**         Enable     - byte PWM_Cadera_Aduccion_Enable(void);
+**         Disable    - byte PWM_Cadera_Aduccion_Disable(void);
 **         SetRatio16 - byte PWM_Cadera_Aduccion_SetRatio16(word Ratio);
 **         SetDutyUS  - byte PWM_Cadera_Aduccion_SetDutyUS(word Time);
 **         SetDutyMS  - byte PWM_Cadera_Aduccion_SetDutyMS(word Time);
@@ -78,6 +80,46 @@
 #ifdef __cplusplus
 extern "C" {
 #endif 
+
+/*
+** ===================================================================
+**     Method      :  PWM_Cadera_Aduccion_Enable (component PWM)
+**     Description :
+**         This method enables the component - it starts the signal
+**         generation. Events may be generated (<DisableEvent>
+**         /<EnableEvent>).
+**     Parameters  : None
+**     Returns     :
+**         ---             - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - This device does not work in
+**                           the active speed mode
+** ===================================================================
+*/
+/*
+byte PWM_Cadera_Aduccion_Enable(void)
+**  This method is implemented as a macro. See PWM_Cadera_Aduccion.h file.  **
+*/
+
+/*
+** ===================================================================
+**     Method      :  PWM_Cadera_Aduccion_Disable (component PWM)
+**     Description :
+**         This method disables the component - it stops the signal
+**         generation and events calling. When the timer is disabled,
+**         it is possible to call <ClrValue> and <SetValue> methods.
+**     Parameters  : None
+**     Returns     :
+**         ---             - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - This device does not work in
+**                           the active speed mode
+** ===================================================================
+*/
+/*
+byte PWM_Cadera_Aduccion_Disable(void)
+**  This method is implemented as a macro. See PWM_Cadera_Aduccion.h file.  **
+*/
 
 /*
 ** ===================================================================

@@ -34,7 +34,8 @@ Generated_Code/PE_LDD.o: ../Generated_Code/PE_LDD.c \
  ../Generated_Code/TimerIntLdd1.h ../Generated_Code/TU3.h \
  ../Generated_Code/GI2C1.h ../Generated_Code/I2C1.h \
  ../Generated_Code/DA1.h \
- C:/Freescale/CW\ MCU\ v10.5/MCU/ProcessorExpert/lib/Kinetis/pdd/inc/DAC_PDD.h
+ C:/Freescale/CW\ MCU\ v10.5/MCU/ProcessorExpert/lib/Kinetis/pdd/inc/DAC_PDD.h \
+ ../Generated_Code/CS1.h
 
 C:/Freescale/CW\ MCU\ v10.5/MCU/ARM_GCC_Support/ewl/EWL_C/include/lib_ewl.prefix:
 
@@ -143,3 +144,5 @@ C:/Freescale/CW\ MCU\ v10.5/MCU/ProcessorExpert/lib/Kinetis/pdd/inc/TPM_PDD.h:
 ../Generated_Code/DA1.h:
 
 C:/Freescale/CW\ MCU\ v10.5/MCU/ProcessorExpert/lib/Kinetis/pdd/inc/DAC_PDD.h:
+
+../Generated_Code/CS1.h:

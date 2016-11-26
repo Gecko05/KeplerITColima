@@ -5,7 +5,7 @@
 **     Processor   : MKL46Z256VMC4
 **     Version     : Component 01.002, Driver 01.04, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-16, 15:22, # CodeGen: 23
+**     Date/Time   : 2016-11-22, 22:41, # CodeGen: 42
 **     Abstract    :
 **
 **     Settings    :
@@ -61,6 +61,7 @@
   #include "GI2C1.h"
   #include "I2C1.h"
   #include "DA1.h"
+  #include "CS1.h"
   #include "Events.h"
 
 
@@ -105,7 +106,7 @@
     (tIsrFunc)&Cpu_Interrupt,          /* 0x16  0x00000058   -   ivINT_LVD_LVW                 unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x17  0x0000005C   -   ivINT_LLW                     unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x18  0x00000060   -   ivINT_I2C0                    unused by PE */
-    (tIsrFunc)&I2C1_Interrupt,         /* 0x19  0x00000064   2   ivINT_I2C1                    used by PE */
+    (tIsrFunc)&I2C1_Interrupt,         /* 0x19  0x00000064   1   ivINT_I2C1                    used by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x1A  0x00000068   -   ivINT_SPI0                    unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x1B  0x0000006C   -   ivINT_SPI1                    unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x1C  0x00000070   -   ivINT_UART0                   unused by PE */
@@ -114,7 +115,7 @@
     (tIsrFunc)&Cpu_Interrupt,          /* 0x1F  0x0000007C   -   ivINT_ADC0                    unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x20  0x00000080   -   ivINT_CMP0                    unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x21  0x00000084   -   ivINT_TPM0                    unused by PE */
-    (tIsrFunc)&Cpu_Interrupt,          /* 0x22  0x00000088   -   ivINT_TPM1                    unused by PE */
+    (tIsrFunc)&TU2_Interrupt,          /* 0x22  0x00000088   2   ivINT_TPM1                    used by PE */
     (tIsrFunc)&TU3_Interrupt,          /* 0x23  0x0000008C   2   ivINT_TPM2                    used by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x24  0x00000090   -   ivINT_RTC                     unused by PE */
     (tIsrFunc)&Cpu_Interrupt,          /* 0x25  0x00000094   -   ivINT_RTC_Seconds             unused by PE */

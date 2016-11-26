@@ -25,6 +25,7 @@
 "./Generated_Code/GI2C1.o"
 "./Generated_Code/DA1.o"
 "./Generated_Code/Cpu.o"
+"./Generated_Code/CS1.o"
 "./Generated_Code/BitIoLdd6.o"
 "./Generated_Code/BitIoLdd5.o"
 "./Generated_Code/BitIoLdd4.o"

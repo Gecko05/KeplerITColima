@@ -6,7 +6,7 @@
 **     Component   : PWM_LDD
 **     Version     : Component 01.013, Driver 01.03, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-15, 15:41, # CodeGen: 16
+**     Date/Time   : 2016-11-22, 05:42, # CodeGen: 32
 **     Abstract    :
 **          This component implements a pulse-width modulation generator
 **          that generates signal with variable duty and fixed cycle.
@@ -20,15 +20,18 @@
 **          Output pin                                     : LCD_P59/ADC0_DP0/ADC0_SE0/PTE20/TPM1_CH0/UART0_TX
 **          Output pin signal                              : 
 **          Counter                                        : TPM1_CNT
-**          Interrupt service/event                        : Disabled
+**          Interrupt service/event                        : Enabled
+**            Interrupt                                    : INT_TPM1
+**            Interrupt priority                           : medium priority
+**            Iterations before action/event               : 1
 **          Period                                         : 20 ms
-**          Starting pulse width                           : 10 ms
+**          Starting pulse width                           : 1 ms
 **          Initial polarity                               : low
 **          Initialization                                 : 
 **            Enabled in init. code                        : yes
 **            Auto initialization                          : yes
 **            Event mask                                   : 
-**              OnEnd                                      : Disabled
+**              OnEnd                                      : Enabled
 **          CPU clock/configuration selection              : 
 **            Clock configuration 0                        : This component enabled
 **            Clock configuration 1                        : This component disabled
@@ -90,8 +93,8 @@ extern "C" {
 #endif 
 
 
-#define PwmLdd4_PERIOD_VALUE 0xCCCDUL  /* Initial period value in ticks of the timer. */
-#define PwmLdd4_PERIOD_VALUE_0 0xCCCDUL /* Period value in ticks of the timer in clock configuration 0. */
+#define PwmLdd4_PERIOD_VALUE 0x6666UL  /* Initial period value in ticks of the timer. */
+#define PwmLdd4_PERIOD_VALUE_0 0x6666UL /* Period value in ticks of the timer in clock configuration 0. */
 
 /*! Peripheral base address of a device allocated by the component. This constant can be used directly in PDD macros. */
 #define PwmLdd4_PRPH_BASE_ADDRESS  0x40039000U
@@ -108,6 +111,7 @@ extern "C" {
 #define PwmLdd4_SetDutyMS_METHOD_ENABLED /*!< SetDutyMS method of the component PwmLdd4 is enabled (generated) */
 
 /* Events configuration constants - generated for all enabled component's events */
+#define PwmLdd4_OnEnd_EVENT_ENABLED    /*!< OnEnd event of the component PwmLdd4 is enabled (generated) */
 
 
 
@@ -258,6 +262,25 @@ LDD_TError PwmLdd4_SetDutyUS(LDD_TDeviceData *DeviceDataPtr, uint16_t Time);
 */
 /* ===================================================================*/
 LDD_TError PwmLdd4_SetDutyMS(LDD_TDeviceData *DeviceDataPtr, uint16_t Time);
+
+/*
+** ===================================================================
+**     Method      :  PwmLdd4_OnCounterRestart (component PWM_LDD)
+**
+**     Description :
+**         Called if counter overflow/underflow or counter is 
+**         reinitialized by modulo or compare register matching. 
+**         OnCounterRestart event and Timer unit must be enabled. See <a 
+**         href="UntitledMethods.html#SetEventMask">SetEventMask</a> and 
+**         <a href="UntitledMethods.html#GetEventMask">GetEventMask</a> 
+**         methods.This event is available only if a <a 
+**         href="UntitledProperties.html#IntServiceCounter">Interrupt</a> 
+**         is enabled. The event services the event of the inherited 
+**         component and eventually invokes other events.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+void TU2_OnCounterRestart(LDD_TUserData *UserDataPtr);
 
 /* END PwmLdd4. */
 

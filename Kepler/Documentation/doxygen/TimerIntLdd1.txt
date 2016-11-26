@@ -41,10 +41,10 @@ by the component.
     0x00000232
  </td><td>TPM2_C0V register, peripheral TimerIntLdd1.</td></tr>
 <tr><td>0xE000E410</td><td>NVIC_IPR4</td><td>
-    0x80000000
+    0x80800000
  </td><td>NVIC_IPR4 register, peripheral TimerIntLdd1.</td></tr>
 <tr><td>0xE000E100</td><td>NVIC_ISER</td><td>
-    0x00084000
+    0x000C4000
  </td><td>NVIC_ISER register, peripheral TimerIntLdd1.</td></tr>
 </table>
 <br/>
@@ -463,11 +463,11 @@ registers of the peripheral(s) configured by the component.
         
 </div>
 <table class="regtbl2"><tr><td class="trowtit" colspan="2">Address</td><td colspan="2">0xE000E410</td></tr>
-<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x80000000</td></tr>
+<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x80800000</td></tr>
 <tr class="trowtit"><td  class="trowtit" colspan="2">After-reset value</td><td colspan="2">0x00000000</td></tr>
 <tr><td class="ttitle2">Bit</td><td class="ttitle2">Field</td><td class="ttitle2">Value</td><td class="ttitle2">Description</td></tr>
 <tr><td>24 - 31</td><td>PRI_19</td><td>0x80</td><td>Priority of interrupt 20</td>
-<tr><td>16 - 23</td><td>PRI_18</td><td>0x00</td><td>Priority of interrupt 19</td>
+<tr><td>16 - 23</td><td>PRI_18</td><td>0x80</td><td>Priority of interrupt 19</td>
 <tr><td>8 - 15</td><td>PRI_17</td><td>0x00</td><td>Priority of interrupt 18</td>
 <tr><td>0 - 7</td><td>PRI_16</td><td>0x00</td><td>Priority of interrupt 17</td>
 </tr></table>
@@ -508,7 +508,7 @@ registers of the peripheral(s) configured by the component.
         
 </div>
 <table class="regtbl2"><tr><td class="trowtit" colspan="2">Address</td><td colspan="2">0xE000E100</td></tr>
-<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x00084000</td></tr>
+<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x000C4000</td></tr>
 <tr class="trowtit"><td  class="trowtit" colspan="2">After-reset value</td><td colspan="2">0x00000000</td></tr>
 <tr><td class="ttitle2">Bit</td><td class="ttitle2">Field</td><td class="ttitle2">Value</td><td class="ttitle2">Description</td></tr>
 <tr><td>0 - 31</td><td>SETENA</td><td>0x00</td><td>Interrupt set enable bits</td>

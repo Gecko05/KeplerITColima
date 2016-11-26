@@ -6,7 +6,7 @@
 **     Component   : AsynchroSerial
 **     Version     : Component 02.602, Driver 01.01, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-15, 15:54, # CodeGen: 18
+**     Date/Time   : 2016-11-22, 06:59, # CodeGen: 35
 **     Abstract    :
 **         This component "AsynchroSerial" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -46,6 +46,8 @@
 **
 **
 **     Contents    :
+**         Enable          - byte AS1_Enable(void);
+**         Disable         - byte AS1_Disable(void);
 **         RecvChar        - byte AS1_RecvChar(AS1_TComData *Chr);
 **         SendChar        - byte AS1_SendChar(AS1_TComData Chr);
 **         RecvBlock       - byte AS1_RecvBlock(AS1_TComData *Ptr, word Size, word *Rcv);
@@ -113,6 +115,39 @@ extern "C" {
 #endif
 
 #define AS1_INP_BUF_SIZE  0x05U        /* Length of the RX buffer */
+
+/*
+** ===================================================================
+**     Method      :  AS1_Enable (component AsynchroSerial)
+**     Description :
+**         Enables the component - it starts the send and receive
+**         functions. Events may be generated
+**         ("DisableEvent"/"EnableEvent").
+**     Parameters  : None
+**     Returns     :
+**         ---             - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - This device does not work in
+**                           the active speed mode
+** ===================================================================
+*/
+byte AS1_Enable(void);
+
+/*
+** ===================================================================
+**     Method      :  AS1_Disable (component AsynchroSerial)
+**     Description :
+**         Disables the component - it stops the send and receive
+**         functions. No events will be generated.
+**     Parameters  : None
+**     Returns     :
+**         ---             - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - This device does not work in
+**                           the active speed mode
+** ===================================================================
+*/
+byte AS1_Disable(void);
 
 /*
 ** ===================================================================

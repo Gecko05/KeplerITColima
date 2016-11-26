@@ -7,7 +7,7 @@
 **     Version     : Component 01.002, Driver 01.04, CPU db: 3.00.000
 **     Datasheet   : KL46P121M48SF4RM, Rev.2, Dec 2012
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-16, 15:22, # CodeGen: 23
+**     Date/Time   : 2016-11-22, 17:46, # CodeGen: 36
 **     Abstract    :
 **
 **     Settings    :
@@ -67,6 +67,7 @@
 #include "GI2C1.h"
 #include "I2C1.h"
 #include "DA1.h"
+#include "CS1.h"
 #include "PE_Types.h"
 #include "PE_Error.h"
 #include "PE_Const.h"
@@ -282,6 +283,7 @@ void PE_low_level_init(void)
   /* ### TimerInt "TI1" init code ... */
   /* ### GenericI2C "GI2C1" init code ... */
   GI2C1_Init();
+  /* ### CriticalSection "CS1" init code ... */
   __EI();
 }
   /* Flash configuration field */

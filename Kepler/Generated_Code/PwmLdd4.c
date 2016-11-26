@@ -6,7 +6,7 @@
 **     Component   : PWM_LDD
 **     Version     : Component 01.013, Driver 01.03, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-15, 15:41, # CodeGen: 16
+**     Date/Time   : 2016-11-22, 05:42, # CodeGen: 32
 **     Abstract    :
 **          This component implements a pulse-width modulation generator
 **          that generates signal with variable duty and fixed cycle.
@@ -20,15 +20,18 @@
 **          Output pin                                     : LCD_P59/ADC0_DP0/ADC0_SE0/PTE20/TPM1_CH0/UART0_TX
 **          Output pin signal                              : 
 **          Counter                                        : TPM1_CNT
-**          Interrupt service/event                        : Disabled
+**          Interrupt service/event                        : Enabled
+**            Interrupt                                    : INT_TPM1
+**            Interrupt priority                           : medium priority
+**            Iterations before action/event               : 1
 **          Period                                         : 20 ms
-**          Starting pulse width                           : 10 ms
+**          Starting pulse width                           : 1 ms
 **          Initial polarity                               : low
 **          Initialization                                 : 
 **            Enabled in init. code                        : yes
 **            Auto initialization                          : yes
 **            Event mask                                   : 
-**              OnEnd                                      : Disabled
+**              OnEnd                                      : Enabled
 **          CPU clock/configuration selection              : 
 **            Clock configuration 0                        : This component enabled
 **            Clock configuration 1                        : This component disabled
@@ -71,6 +74,7 @@
 
 /* MODULE PwmLdd4. */
 
+#include "PWM_Tobillo.h"
 #include "PwmLdd4.h"
 /* {Default RTOS Adapter} No RTOS includes */
 
@@ -91,6 +95,7 @@ typedef PwmLdd4_TDeviceData *PwmLdd4_TDeviceDataPtr; /* Pointer to the device da
 static PwmLdd4_TDeviceData DeviceDataPrv__DEFAULT_RTOS_ALLOC;
 
 #define CHANNEL 0x00U
+#define AVAILABLE_EVENTS_MASK (LDD_TEventMask)(LDD_PWM_ON_END)
 /* Internal method prototypes */
 static void SetRatio(LDD_TDeviceData *DeviceDataPtr);
 /*
@@ -125,7 +130,7 @@ LDD_TDeviceData* PwmLdd4_Init(LDD_TUserData *UserDataPtr)
   DeviceDataPrv = &DeviceDataPrv__DEFAULT_RTOS_ALLOC;
   DeviceDataPrv->UserDataPtr = UserDataPtr; /* Store the RTOS device structure */
   DeviceDataPrv->EnUser = TRUE;        /* Set the flag "device enabled" */
-  DeviceDataPrv->RatioStore = 0x7FFFU; /* Ratio after initialization */
+  DeviceDataPrv->RatioStore = 0x0CCEU; /* Ratio after initialization */
   /* Registration of the device structure */
   PE_LDD_RegisterDeviceStructure(PE_LDD_COMPONENT_PwmLdd4_ID,DeviceDataPrv);
   DeviceDataPrv->LinkedDeviceDataPtr = TU2_Init((LDD_TUserData *)NULL);
@@ -268,7 +273,7 @@ LDD_TError PwmLdd4_SetDutyUS(LDD_TDeviceData *DeviceDataPtr, uint16_t Time)
   if (Time > 0x4E20U) {                /* Is the given value out of range? */
     return ERR_PARAM_RANGE;            /* If yes then error */
   }
-  rtval = Time * 3.276787500048F;      /* Multiply given value and actual clock configuration coefficient */
+  rtval = Time * 3.276850000763F;      /* Multiply given value and actual clock configuration coefficient */
   if (rtval > 0xFFFFUL) {              /* Is the result greater than 65535 ? */
     DeviceDataPrv->RatioStore = 0xFFFFU; /* If yes then use maximal possible value */
   }
@@ -314,7 +319,7 @@ LDD_TError PwmLdd4_SetDutyMS(LDD_TDeviceData *DeviceDataPtr, uint16_t Time)
   if (Time > 0x14U) {                  /* Is the given value out of range? */
     return ERR_PARAM_RANGE;            /* If yes then error */
   }
-  rtval = Time * 3276.787500038724F;   /* Multiply given value and actual clock configuration coefficient */
+  rtval = Time * 3276.850000798792F;   /* Multiply given value and actual clock configuration coefficient */
   if (rtval > 0xFFFFUL) {              /* Is the result greater than 65535 ? */
     DeviceDataPrv->RatioStore = 0xFFFFU; /* If yes then use maximal possible value */
   }
@@ -323,6 +328,30 @@ LDD_TError PwmLdd4_SetDutyMS(LDD_TDeviceData *DeviceDataPtr, uint16_t Time)
   }
   SetRatio(DeviceDataPtr);             /* Calculate and set up new appropriate values of the duty register */
   return ERR_OK;                       /* OK */
+}
+
+/*
+** ===================================================================
+**     Method      :  PwmLdd4_OnCounterRestart (component PWM_LDD)
+**
+**     Description :
+**         Called if counter overflow/underflow or counter is 
+**         reinitialized by modulo or compare register matching. 
+**         OnCounterRestart event and Timer unit must be enabled. See <a 
+**         href="UntitledMethods.html#SetEventMask">SetEventMask</a> and 
+**         <a href="UntitledMethods.html#GetEventMask">GetEventMask</a> 
+**         methods.This event is available only if a <a 
+**         href="UntitledProperties.html#IntServiceCounter">Interrupt</a> 
+**         is enabled. The event services the event of the inherited 
+**         component and eventually invokes other events.
+**         This method is internal. It is used by Processor Expert only.
+** ===================================================================
+*/
+void TU2_OnCounterRestart(LDD_TUserData *UserDataPtr)
+{
+  PwmLdd4_TDeviceData *DeviceDataPrv = PE_LDD_DeviceDataList[PE_LDD_COMPONENT_PwmLdd4_ID];
+
+  PwmLdd4_OnEnd(DeviceDataPrv->UserDataPtr); /* Invoke OnEnd event */
 }
 
 /*

@@ -63,6 +63,7 @@
 #include "GI2C1.h"
 #include "I2C1.h"
 #include "DA1.h"
+#include "CS1.h"
 #include "TI1.h"
 #include "TimerIntLdd1.h"
 #include "TU3.h"
@@ -164,6 +165,45 @@ void AS1_OnFullRxBuf(void);
 ** ===================================================================
 */
 void TI1_OnInterrupt(void);
+
+/*
+** ===================================================================
+**     Event       :  TU2_OnChannel1 (module Events)
+**
+**     Component   :  TU2 [TimerUnit_LDD]
+*/
+/*!
+**     @brief
+**         Called if compare register match the counter registers or
+**         capture register has a new content. OnChannel1 event and
+**         Timer unit must be enabled. See [SetEventMask] and
+**         [GetEventMask] methods. This event is available only if a
+**         [Interrupt] is enabled.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. The pointer passed as
+**                           the parameter of Init method.
+*/
+/* ===================================================================*/
+void TU2_OnChannel1(LDD_TUserData *UserDataPtr);
+
+/*
+** ===================================================================
+**     Event       :  PWM_Tobillo_OnEnd (module Events)
+**
+**     Component   :  PWM_Tobillo [PWM]
+**     Description :
+**         This event is called when the specified number of cycles has
+**         been generated. (Only when the component is enabled -
+**         <Enable> and the events are enabled - <EnableEvent>). The
+**         event is available only when the <Interrupt service/event>
+**         property is enabled and selected peripheral supports
+**         appropriate interrupt.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void PWM_Tobillo_OnEnd(void);
 
 /* END Events */
 

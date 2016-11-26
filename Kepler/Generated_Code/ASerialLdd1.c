@@ -6,7 +6,7 @@
 **     Component   : Serial_LDD
 **     Version     : Component 01.168, Driver 01.11, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-14, 17:56, # CodeGen: 8
+**     Date/Time   : 2016-11-22, 22:41, # CodeGen: 42
 **     Abstract    :
 **         This component "Serial_LDD" implements an asynchronous serial
 **         communication. The component supports different settings of
@@ -19,11 +19,11 @@
 **          Device                                         : UART2
 **          Interrupt service/event                        : Enabled
 **            Interrupt RxD                                : INT_UART2
-**            Interrupt RxD priority                       : medium priority
+**            Interrupt RxD priority                       : low priority
 **            Interrupt TxD                                : INT_UART2
-**            Interrupt TxD priority                       : medium priority
+**            Interrupt TxD priority                       : low priority
 **            Interrupt Error                              : INT_UART2
-**            Interrupt Error priority                     : medium priority
+**            Interrupt Error priority                     : low priority
 **          Settings                                       : 
 **            Data width                                   : 8 bits
 **            Parity                                       : None
@@ -63,6 +63,8 @@
 **            Clock configuration 7                        : This component disabled
 **     Contents    :
 **         Init         - LDD_TDeviceData* ASerialLdd1_Init(LDD_TUserData *UserDataPtr);
+**         Enable       - LDD_TError ASerialLdd1_Enable(LDD_TDeviceData *DeviceDataPtr);
+**         Disable      - LDD_TError ASerialLdd1_Disable(LDD_TDeviceData *DeviceDataPtr);
 **         SendBlock    - LDD_TError ASerialLdd1_SendBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData...
 **         ReceiveBlock - LDD_TError ASerialLdd1_ReceiveBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData...
 **         GetError     - LDD_TError ASerialLdd1_GetError(LDD_TDeviceData *DeviceDataPtr,...
@@ -177,6 +179,7 @@ LDD_TDeviceData* ASerialLdd1_Init(LDD_TUserData *UserDataPtr)
   UART_PDD_EnableReceiver(UART2_BASE_PTR, PDD_DISABLE); /* Disable receiver. */
   DeviceDataPrv->SerFlag = 0x00U;      /* Reset flags */
   DeviceDataPrv->ErrFlag = 0x00U;      /* Reset error flags */
+  DeviceDataPrv->EnUser = TRUE;        /* Enable device */
   /* UART2_C1: LOOPS=0,UARTSWAI=0,RSRC=0,M=0,WAKE=0,ILT=0,PE=0,PT=0 */
   UART2_C1 = 0x00U;                    /*  Set the C1 register */
   /* UART2_C3: R8=0,T8=0,TXDIR=0,TXINV=0,ORIE=0,NEIE=0,FEIE=0,PEIE=0 */
@@ -190,6 +193,66 @@ LDD_TDeviceData* ASerialLdd1_Init(LDD_TUserData *UserDataPtr)
   /* Registration of the device structure */
   PE_LDD_RegisterDeviceStructure(PE_LDD_COMPONENT_ASerialLdd1_ID,DeviceDataPrv);
   return ((LDD_TDeviceData *)DeviceDataPrv);
+}
+
+/*
+** ===================================================================
+**     Method      :  ASerialLdd1_Enable (component Serial_LDD)
+*/
+/*!
+**     @brief
+**         Enables the device, starts the transmitting and receiving.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by <Init> method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration.
+*/
+/* ===================================================================*/
+LDD_TError ASerialLdd1_Enable(LDD_TDeviceData *DeviceDataPtr)
+{
+  ASerialLdd1_TDeviceDataPtr DeviceDataPrv = (ASerialLdd1_TDeviceDataPtr)DeviceDataPtr;
+
+  if (!DeviceDataPrv->EnUser) {        /* Is the device disabled by user? */
+    DeviceDataPrv->EnUser = TRUE;      /* If yes then set the flag "device enabled" */
+    UART_PDD_EnableTransmitter(UART2_BASE_PTR, PDD_ENABLE); /* Enable transmitter */
+    UART_PDD_EnableReceiver(UART2_BASE_PTR, PDD_ENABLE); /* Enable receiver */
+    UART_PDD_EnableInterrupt(UART2_BASE_PTR, ( UART_PDD_INTERRUPT_RECEIVER | UART_PDD_INTERRUPT_PARITY_ERROR | UART_PDD_INTERRUPT_FRAMING_ERROR | UART_PDD_INTERRUPT_NOISE_ERROR | UART_PDD_INTERRUPT_OVERRUN_ERROR )); /* Enable interrupts */
+  }
+  return ERR_OK;                       /* OK */
+}
+
+/*
+** ===================================================================
+**     Method      :  ASerialLdd1_Disable (component Serial_LDD)
+*/
+/*!
+**     @brief
+**         Disables the device, stops the transmitting and receiving.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by <Init> method.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_SPEED - The component does not work in
+**                           the active clock configuration.
+*/
+/* ===================================================================*/
+LDD_TError ASerialLdd1_Disable(LDD_TDeviceData *DeviceDataPtr)
+{
+  ASerialLdd1_TDeviceDataPtr DeviceDataPrv = (ASerialLdd1_TDeviceDataPtr)DeviceDataPtr;
+
+  if (DeviceDataPrv->EnUser) {         /* Is the device enabled by user? */
+    DeviceDataPrv->EnUser = FALSE;     /* If yes then set the flag "device disabled" */
+    UART_PDD_DisableInterrupt(UART2_BASE_PTR, ( UART_PDD_INTERRUPT_RECEIVER | UART_PDD_INTERRUPT_TRANSMITTER | UART_PDD_INTERRUPT_PARITY_ERROR | UART_PDD_INTERRUPT_FRAMING_ERROR | UART_PDD_INTERRUPT_NOISE_ERROR | UART_PDD_INTERRUPT_OVERRUN_ERROR )); /* Disable interrupts */
+    UART_PDD_EnableTransmitter(UART2_BASE_PTR, PDD_DISABLE); /* Disable transmitter. */
+    UART_PDD_EnableReceiver(UART2_BASE_PTR, PDD_DISABLE); /* Disable receiver. */
+  }
+  return ERR_OK;                       /* OK */
 }
 
 /*
@@ -227,6 +290,9 @@ LDD_TError ASerialLdd1_ReceiveBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData *B
 {
   ASerialLdd1_TDeviceDataPtr DeviceDataPrv = (ASerialLdd1_TDeviceDataPtr)DeviceDataPtr;
 
+  if (!DeviceDataPrv->EnUser) {        /* Is the device disabled by user? */
+    return ERR_DISABLED;               /* If yes then error */
+  }
   if (Size == 0U) {                    /* Is the parameter Size within an expected range? */
     return ERR_PARAM_SIZE;             /* If no then error */
   }
@@ -279,6 +345,9 @@ LDD_TError ASerialLdd1_SendBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData *Buff
 {
   ASerialLdd1_TDeviceDataPtr DeviceDataPrv = (ASerialLdd1_TDeviceDataPtr)DeviceDataPtr;
 
+  if (!DeviceDataPrv->EnUser) {        /* Is the device disabled by user? */
+    return ERR_DISABLED;               /* If yes then error */
+  }
   if (Size == 0U) {                    /* Is the parameter Size within an expected range? */
     return ERR_PARAM_SIZE;             /* If no then error */
   }
@@ -437,6 +506,9 @@ LDD_TError ASerialLdd1_GetError(LDD_TDeviceData *DeviceDataPtr, LDD_SERIAL_TErro
 {
   ASerialLdd1_TDeviceDataPtr DeviceDataPrv = (ASerialLdd1_TDeviceDataPtr)DeviceDataPtr;
 
+  if (!DeviceDataPrv->EnUser) {        /* Is the device disabled by user? */
+    return ERR_DISABLED;               /* If yes then error */
+  }
   /* {Default RTOS Adapter} Critical section begin, general PE function is used */
   EnterCritical();
   *ErrorPtr = DeviceDataPrv->ErrFlag;

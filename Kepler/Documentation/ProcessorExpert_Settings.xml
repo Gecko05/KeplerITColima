@@ -372,11 +372,11 @@ PE_DEBUGHALT();
           <Device v="UART2" />
           <boolgroup name="Interrupt service/event" v="Enabled">
             <Interrupt_RxD v="INT_UART2" />
-            <Interrupt_RxD_priority v="medium priority" />
+            <Interrupt_RxD_priority v="low priority" />
             <Interrupt_TxD v="INT_UART2" />
-            <Interrupt_TxD_priority v="medium priority" />
+            <Interrupt_TxD_priority v="low priority" />
             <Interrupt_Error v="INT_UART2" />
-            <Interrupt_Error_priority v="medium priority" />
+            <Interrupt_Error_priority v="low priority" />
           </boolgroup>
           <group name="Settings">
             <Data_width v="8 bits" />
@@ -485,11 +485,11 @@ PE_DEBUGHALT();
       </inhrbean>
       <boolgroup name="Interrupt service/event" v="Enabled">
         <Interrupt_RxD v="INT_UART2" />
-        <Interrupt_RxD_priority v="medium priority" />
+        <Interrupt_RxD_priority v="low priority" />
         <Interrupt_TxD v="INT_UART2" />
-        <Interrupt_TxD_priority v="medium priority" />
+        <Interrupt_TxD_priority v="low priority" />
         <Interrupt_Error v="INT_UART2" />
-        <Interrupt_Error_priority v="medium priority" />
+        <Interrupt_Error_priority v="low priority" />
         <Input_buffer_size v="5" />
         <Output_buffer_size v="0" />
         <group name="Handshake">
@@ -1980,7 +1980,7 @@ PE_DEBUGHALT();
       <I2C_channel v="I2C1" />
       <boolgroup name="Interrupt service" v="Enabled">
         <Interrupt v="INT_I2C1" />
-        <Interrupt_priority v="medium priority" />
+        <Interrupt_priority v="high priority" />
       </boolgroup>
       <group name="Settings">
         <Mode_selection v="MASTER" />
@@ -2072,8 +2072,8 @@ PE_DEBUGHALT();
       <SlaveCancelReceptionBlock v="don&amp;apos;t generate code" />
       <SelectSlaveDevice v="generate code" />
       <SendAcknowledge v="don&amp;apos;t generate code" />
-      <GetError v="don&amp;apos;t generate code" />
-      <CheckBus v="don&amp;apos;t generate code" />
+      <GetError v="generate code" />
+      <CheckBus v="generate code" />
       <GetStats v="don&amp;apos;t generate code" />
       <ClearStats v="don&amp;apos;t generate code" />
       <Main v="don&amp;apos;t generate code" />

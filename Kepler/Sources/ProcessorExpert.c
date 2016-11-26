@@ -72,7 +72,7 @@
 #include "Math.h"
 
 /* User includes (#include below this line is not maintained by Processor Expert) */
-#define Baja 16000
+#define Baja 12000
 #define Media 2
 #define Alta 3
 
@@ -82,14 +82,16 @@ char orden_articulacion;
 char orden_modo;					
 int orden_angulo;
 
-volatile bandera_actualizar;
+volatile int bandera_actualizar;
 
 byte datoi2c[6];
 int16 gx,gy,ax,ay,az,gz;
+int16 hx,hy,vx,vy,vz,hz;
 byte memAddr = 0x3B;
 byte memAddr1 = 0x43;
-float Acc[2];
-float Gy[2];
+int repeticiones;
+float Acc[4];
+float Gy[4];
 float Angle[4];
 int angulo[4];
 volatile char orden[5];
@@ -97,6 +99,8 @@ volatile char orden[5];
 #define G_R 131.0
 #define pwmgm  0x6B;
 #define RAD_TO_DEG  57.295779
+
+int i,j;
 
 char envio[3];
 
@@ -112,8 +116,9 @@ typedef struct Articulacion{
 	int angulo_minimo;
 	int angulo_maximo;
 	int angulo_nuevo;
+	int repeticiones;
 }Articulacion;
-
+int electro;
 Articulacion Rodilla;
 Articulacion CaderaF;
 Articulacion CaderaA;
@@ -135,42 +140,47 @@ Articulacion Tobillo;
 		switch(articulacion){
 		case 'R':										//	R O D I L L A
 			Rodilla.angulo_nuevo = angulo;
-			PWM_Rodilla_SetDutyUS(Baja);
+			
 			if(Rodilla.angulo_nuevo>Rodilla.angulo_actual){
 				S0_Rodilla_SetVal();
 				S1_Rodilla_ClrVal();
+				PWM_Rodilla_SetDutyUS(20000);
 			}
 			else if(Rodilla.angulo_nuevo<Rodilla.angulo_actual){
 				S0_Rodilla_ClrVal();
 				S1_Rodilla_SetVal();
+				PWM_Rodilla_SetDutyUS(10000);
 			}
-			else{
+			else if(Rodilla.angulo_nuevo==Rodilla.angulo_actual){
 				S0_Rodilla_ClrVal();
 				S1_Rodilla_ClrVal();
+				orden[1] = 'N';
 				orden_articulacion = 'N';
 			}
 			break;
 		case 'C':										//	C A D E R A		F L E X I O N
 			//CaderaF.angulo_nuevo = (angulo*(float)(2/3))-60;
 			CaderaF.angulo_nuevo = angulo;
-			PWM_Cadera_Flexion_SetDutyUS(Baja);
 			if(CaderaF.angulo_nuevo<CaderaF.angulo_actual){
+				PWM_Cadera_Flexion_SetDutyUS(1000);
 				S0_Cadera_Flexion_SetVal();
 				S1_Cadera_Flexion_ClrVal();
 			}
 			else if(CaderaF.angulo_nuevo>CaderaF.angulo_actual){
+				PWM_Cadera_Flexion_SetDutyUS(15000);
 				S0_Cadera_Flexion_ClrVal();
 				S1_Cadera_Flexion_SetVal();
 			}
-			else{
+			else if(CaderaF.angulo_nuevo==CaderaF.angulo_actual){
 				S0_Cadera_Flexion_ClrVal();
 				S1_Cadera_Flexion_ClrVal();
+				orden[1] = 'N';
 				orden_articulacion = 'N';
 			}
 			break;
 		case 'A':										//	C A D E R A		A D U C C I O N
 			CaderaA.angulo_nuevo = angulo;
-			PWM_Cadera_Aduccion_SetDutyUS(Baja);
+			PWM_Cadera_Aduccion_SetDutyUS(20000);
 			if(CaderaA.angulo_nuevo>CaderaA.angulo_actual){
 				S0_Cadera_Aduccion_SetVal();
 				S1_Cadera_Aduccion_ClrVal();
@@ -186,7 +196,10 @@ Articulacion Tobillo;
 			}
 			break;
 		case 'T':										//	T O B I L L O
-			Tobillo.angulo_nuevo = angulo;
+			Tobillo.angulo_nuevo = (float)angulo/((float)(0.07))+18000;
+			Tobillo.angulo_actual = Tobillo.angulo_nuevo;
+			PWM_Tobillo_SetDutyUS(Tobillo.angulo_actual);
+			
 			break;
 		default:
 			break;
@@ -225,31 +238,34 @@ Articulacion Tobillo;
 		gz = ((datoi2c[4]<<8) | (datoi2c[5]));
 		Gy[0] = gz/G_R;
 		Gy[1] = gy/G_R;
-		Angle[0] = 0.98 *(Angle[0]+Gy[0]*0.02) + 0.02*Acc[0];
-		Angle[1] = 0.98 *(Angle[1]+Gy[1]*0.02) + 0.02*Acc[1];
+		Angle[0] = 0.98 *(Angle[0]-Gy[0]*0.02) + 0.02*Acc[0];
+		Angle[1] = 0.98 *(Angle[1]-Gy[1]*0.02) + 0.02*Acc[1];
 		angulo[0] = Angle[0];
 		angulo[1] = Angle[1];	
-		}
-		bandera_actualizar = 0;
+
 		
 		GI2C1_ReadAddress(0x69,&memAddr,1,&datoi2c[0],6);
 		//GI2C1_ReadByteAddress8(0x68,memAddr,&datoi2c[0]);
-		ax = ((datoi2c[0]<<8) | (datoi2c[1]));
-		ay = ((datoi2c[2]<<8) | (datoi2c[3]));
-		az = ((datoi2c[4]<<8) | (datoi2c[5]));
-		Acc[1] = atan(-1*(az/A_R)/sqrt(powf((ay/A_R),2) + powf((ax/A_R),2)))*RAD_TO_DEG;
-		Acc[0] = atan((ay/A_R)/sqrt(powf((az/A_R),2) + powf((ax/A_R),2)))*RAD_TO_DEG;
+		vx = ((datoi2c[0]<<8) | (datoi2c[1]));
+		vy = ((datoi2c[2]<<8) | (datoi2c[3]));
+		vz = ((datoi2c[4]<<8) | (datoi2c[5]));
+		Acc[3] = atan(-1*(vz/A_R)/sqrt(powf((vy/A_R),2) + powf((vx/A_R),2)))*RAD_TO_DEG;
+		Acc[2] = atan((vy/A_R)/sqrt(powf((vz/A_R),2) + powf((vx/A_R),2)))*RAD_TO_DEG;
 		GI2C1_ReadAddress(0x69,&memAddr1,1,&datoi2c[0],6);
-		gx = ((datoi2c[0]<<8) | (datoi2c[1]));
-		gy = ((datoi2c[2]<<8) | (datoi2c[3]));
-		gz = ((datoi2c[4]<<8) | (datoi2c[5]));
-		Gy[0] = gz/G_R;
-		Gy[1] = gy/G_R;
-		Angle[2] = 0.98 *(Angle[2]+Gy[0]*0.010) + 0.02*Acc[0];
-		Angle[3] = 0.98 *(Angle[3]+Gy[1]*0.010) + 0.02*Acc[1];
+		hx = ((datoi2c[0]<<8) | (datoi2c[1]));
+		hy = ((datoi2c[2]<<8) | (datoi2c[3]));
+		hz = ((datoi2c[4]<<8) | (datoi2c[5]));
+		Gy[2] = hz/G_R;
+		Gy[3] = hy/G_R;
+		Angle[2] = 0.98 *(Angle[2]-Gy[2]*0.010) + 0.02*Acc[2];
+		Angle[3] = 0.98 *(Angle[3]-Gy[3]*0.010) + 0.02*Acc[3];
 		angulo[2] = Angle[2];
 		angulo[3] = Angle[3];
-		CaderaF.angulo_actual = angulo[0];
+		Rodilla.angulo_actual = Acc[2]+30;
+		CaderaF.angulo_actual = Acc[0];
+		bandera_actualizar = 0;
+		}
+		
 	}
 
 /*
@@ -317,6 +333,13 @@ void tipo_orden(void){
 	orden_modo = orden[0];
 	orden_articulacion = orden[1];
 	orden_angulo = ((orden[2]-'0')*100) + ((orden[3]-'0')*10)+((orden[4]-'0'));
+	if(orden_articulacion=='E'){
+			MODO = RUTINA;
+			orden_modo = 'R';
+	}
+	else if(orden_articulacion=='F'){
+		electro = 0;
+	}
 	switch(orden_modo){
 	case 'A':
 		MODO = AJUSTE;
@@ -331,6 +354,20 @@ void tipo_orden(void){
 	}
 }
 	
+
+/*void repeticiones(char articulacion,int repeticiones){
+	switch(articulacion){
+	case 'C':
+		CaderaF.repeticiones = repeticiones;
+		break;
+	case 'R':
+		Rodilla.repeticiones = repeticiones;
+		break;
+	case 'T':
+		Tobillo.repeticiones = repeticiones;
+		break;
+	}
+}*/
 	
 	
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
@@ -360,33 +397,73 @@ int main(void)
   //S1_Cadera_Aduccion_SetVal();
   //S0_Cadera_Aduccion_ClrVal();
 
-  PWM_Cadera_Aduccion_SetDutyUS(19999);
+  //PWM_Cadera_Aduccion_SetDutyUS(19999);
   PWM_Cadera_Flexion_SetDutyUS(20000);
   //PWM_Cadera_Flexion_Disable();PWM_Cadera_Aduccion_Disable();PWM_Rodilla_Disable();
-  PWM_Rodilla_SetDutyUS(19999);
   PWM_Tobillo_SetDutyUS(18000);
   GI2C1_WriteByteAddress8(0x68,0x6B,0);
   GI2C1_WriteByteAddress8(0x69,0x6B,0);
+  PWM_Tobillo_SetDutyUS(18000);
   for(;;){
-	  actualizar_angulos();
+	  //actualizar_angulos();
 	  tipo_orden();
 	  while(MODO==AJUSTE){
 		  tipo_orden();
 		  actualizar_angulos();
+		  
 		  if(orden_modo=='X'){
 			  captura_maximo(orden_articulacion);
 		  }
 		  else if(orden_modo=='Y'){
 			  captura_minimo(orden_articulacion);
 		  }
+		  /*else if(orden_modo=='U'){
+			  repeticiones(orden_articulacion,orden_angulo);
+		  }*/
+		  else if(orden_modo=='W'){
+		  	 repeticiones = orden_angulo;
+		  }
 		  ajustar_angulo(orden_articulacion,orden_angulo);
+		  
 /*#######################################################
  * 
  */
 
 	  }
 	  while(MODO==RUTINA){
-		  
+		  for(i=0;i<repeticiones;i++){
+			  while(CaderaF.angulo_actual!=CaderaF.angulo_minimo){
+				  actualizar_angulos();
+				  ajustar_angulo('C',CaderaF.angulo_minimo);
+			  }
+			  while(CaderaF.angulo_actual!=CaderaF.angulo_maximo){
+				  actualizar_angulos();
+				  ajustar_angulo('C',CaderaF.angulo_maximo);
+			  }
+		  }
+		  for(i=0;i<=repeticiones;i++){
+			  while(Rodilla.angulo_actual!=Rodilla.angulo_minimo){
+				  actualizar_angulos();
+				  ajustar_angulo('R',Rodilla.angulo_minimo);
+			  }
+			  while(Rodilla.angulo_actual!=CaderaF.angulo_maximo){
+				  actualizar_angulos();
+				  ajustar_angulo('R',CaderaF.angulo_maximo);
+			  }
+		  }
+		  for(i=0;i<=repeticiones;i++){
+			  while(Tobillo.angulo_actual!=CaderaF.angulo_minimo){
+				  actualizar_angulos();
+				  ajustar_angulo('T',Tobillo.angulo_minimo);
+			  }
+			  while(Tobillo.angulo_actual!=CaderaF.angulo_maximo){
+				  actualizar_angulos();
+				  ajustar_angulo('T',Tobillo.angulo_maximo);
+			  }
+		  }
+		  MODO=AJUSTE;
+		  orden_modo = 'A';
+		  orden_articulacion = 'h';
 	  }
 	  
   }

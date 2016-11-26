@@ -417,11 +417,11 @@ registers of the peripheral(s) configured by the component.
 **          Device                                         : UART2
 **          Interrupt service/event                        : Enabled
 **            Interrupt RxD                                : INT_UART2
-**            Interrupt RxD priority                       : medium priority
+**            Interrupt RxD priority                       : low priority
 **            Interrupt TxD                                : INT_UART2
-**            Interrupt TxD priority                       : medium priority
+**            Interrupt TxD priority                       : low priority
 **            Interrupt Error                              : INT_UART2
-**            Interrupt Error priority                     : medium priority
+**            Interrupt Error priority                     : low priority
 **          Settings                                       : 
 **            Data width                                   : 8 bits
 **            Parity                                       : None

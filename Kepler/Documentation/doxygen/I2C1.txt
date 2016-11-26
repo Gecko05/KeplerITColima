@@ -47,7 +47,7 @@ by the component.
     0x00000600
  </td><td>PORTE_PCR1 register, peripheral I2C1.</td></tr>
 <tr><td>0xE000E408</td><td>NVIC_IPR2</td><td>
-    0x00008000
+    0x00004000
  </td><td>NVIC_IPR2 register, peripheral I2C1.</td></tr>
 <tr><td>0xE000E100</td><td>NVIC_ISER</td><td>
     0x000C4200
@@ -374,12 +374,12 @@ registers of the peripheral(s) configured by the component.
         
 </div>
 <table class="regtbl2"><tr><td class="trowtit" colspan="2">Address</td><td colspan="2">0xE000E408</td></tr>
-<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x00008000</td></tr>
+<tr class="trowtit"><td  class="trowtit" colspan="2">Initial value</td><td colspan="2">0x00004000</td></tr>
 <tr class="trowtit"><td  class="trowtit" colspan="2">After-reset value</td><td colspan="2">0x00000000</td></tr>
 <tr><td class="ttitle2">Bit</td><td class="ttitle2">Field</td><td class="ttitle2">Value</td><td class="ttitle2">Description</td></tr>
 <tr><td>24 - 31</td><td>PRI_11</td><td>0x00</td><td>Priority of interrupt 11</td>
 <tr><td>16 - 23</td><td>PRI_10</td><td>0x00</td><td>Priority of interrupt 10</td>
-<tr><td>8 - 15</td><td>PRI_9</td><td>0x80</td><td>Priority of interrupt 9</td>
+<tr><td>8 - 15</td><td>PRI_9</td><td>0x00</td><td>Priority of interrupt 9</td>
 <tr><td>0 - 7</td><td>PRI_8</td><td>0x00</td><td>Priority of interrupt 8</td>
 </tr></table>
 <div class="reghdr1">NVIC_ISER</div>
@@ -522,7 +522,7 @@ registers of the peripheral(s) configured by the component.
 **          I2C channel                                    : I2C1
 **          Interrupt service                              : Enabled
 **            Interrupt                                    : INT_I2C1
-**            Interrupt priority                           : medium priority
+**            Interrupt priority                           : high priority
 **          Settings                                       : 
 **            Mode selection                               : MASTER
 **            MASTER mode                                  : Enabled

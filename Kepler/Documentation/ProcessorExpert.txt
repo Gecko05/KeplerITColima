@@ -308,6 +308,9 @@ Module "I2C1"      (component I2C_LDD)
    - I2C1_SelectSlaveDevice -This method selects a new slave for communication by its 7-bit slave, 10-bit address or general 
                 call value. Any send or receive method directs to or from selected device, until a new slave device is selected 
                 by this method. This method is available for the MASTER mode.
+   - I2C1_GetError -Returns value of error mask, e.g. LDD_I2C_ARBIT_LOST.
+   - I2C1_CheckBus -This method returns the status of the bus. If the START condition has been detected, the method returns 
+                LDD_I2C_BUSY. If the STOP condition has been detected, the method returns LDD_I2C_IDLE.
 
 Module "DA1"       (component DAC_LDD)
    - DA1_Init -Initializes the device according to design-time configuration properties. Allocates memory for the device data 

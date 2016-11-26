@@ -6,7 +6,7 @@
 **     Component   : GenericI2C
 **     Version     : Component 01.028, Driver 01.00, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-22, 19:09, # CodeGen: 39
+**     Date/Time   : 2016-11-23, 23:01, # CodeGen: 46
 **     Abstract    :
 **         This component implements a generic I2C driver wrapper to work both with LDD and non-LDD I2C components.
 **     Settings    :
@@ -251,7 +251,7 @@ uint8_t GI2C1_ReadAddress(uint8_t i2cAddr, uint8_t *memAddr, uint8_t memAddrSize
         break; /* break for(;;) */
       }
     }
-   // do { /* Wait until data is sent */
+    //do { /* Wait until data is sent */
     //} while (!GI2C1_deviceData.dataTransmittedFlg);
     WAIT1_Waitus(250);
     /* receive data */
@@ -317,8 +317,9 @@ uint8_t GI2C1_WriteAddress(uint8_t i2cAddr, uint8_t *memAddr, uint8_t memAddrSiz
     if (I2C1_MasterSendBlock(GI2C1_deviceData.handle, writeBuf, i, LDD_I2C_SEND_STOP)!=ERR_OK) {
       break; /* break for(;;) */
     }
-    do { /* Wait until data is sent */
-    } while (!GI2C1_deviceData.dataTransmittedFlg);
+    //do { /* Wait until data is sent */
+    //} while (!GI2C1_deviceData.dataTransmittedFlg);
+    WAIT1_Waitus(250);
     break; /* break for(;;) */
   } /* for(;;) */
   if (GI2C1_UnselectSlave()!=ERR_OK) {

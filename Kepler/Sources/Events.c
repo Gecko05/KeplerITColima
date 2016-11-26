@@ -38,7 +38,7 @@ AS1_TComData orden[5];
 word rcv;
 
 int bandera_actualizar;
-
+int electro;
 LDD_DAC_TData onda[15] = {2048, 2880, 3569, 3995, 4084, 3821, 3251, 2473, 1622, 844, 274, 11, 100, 526, 1215};
 int n,m;
 	
@@ -156,7 +156,7 @@ void AS1_OnFullRxBuf(void)
 */
 void TI1_OnInterrupt(void)
 {
-	/*n++;
+	n++;
 	m++;
 	if(m<366){
 		if(n>14){
@@ -169,8 +169,7 @@ void TI1_OnInterrupt(void)
 	}
 	else{
 		m=0;
-	}*/
-	
+	}
 }
 
 /*

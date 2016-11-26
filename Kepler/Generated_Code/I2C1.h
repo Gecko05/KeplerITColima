@@ -6,7 +6,7 @@
 **     Component   : I2C_LDD
 **     Version     : Component 01.016, Driver 01.07, CPU db: 3.00.000
 **     Compiler    : GNU C Compiler
-**     Date/Time   : 2016-11-22, 18:02, # CodeGen: 38
+**     Date/Time   : 2016-11-22, 23:30, # CodeGen: 43
 **     Abstract    :
 **          This component encapsulates the internal I2C communication
 **          interface. The implementation of the interface is based
@@ -29,7 +29,7 @@
 **          I2C channel                                    : I2C1
 **          Interrupt service                              : Enabled
 **            Interrupt                                    : INT_I2C1
-**            Interrupt priority                           : medium priority
+**            Interrupt priority                           : high priority
 **          Settings                                       : 
 **            Mode selection                               : MASTER
 **            MASTER mode                                  : Enabled
@@ -87,6 +87,8 @@
 **         MasterSendBlock    - LDD_TError I2C1_MasterSendBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData...
 **         MasterReceiveBlock - LDD_TError I2C1_MasterReceiveBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData...
 **         SelectSlaveDevice  - LDD_TError I2C1_SelectSlaveDevice(LDD_TDeviceData *DeviceDataPtr,...
+**         GetError           - LDD_TError I2C1_GetError(LDD_TDeviceData *DeviceDataPtr, LDD_I2C_TErrorMask...
+**         CheckBus           - LDD_TError I2C1_CheckBus(LDD_TDeviceData *DeviceDataPtr, LDD_I2C_TBusState...
 **
 **     Copyright : 1997 - 2013 Freescale Semiconductor, Inc. All Rights Reserved.
 **     SOURCE DISTRIBUTION PERMISSIBLE as directed in End User License Agreement.
@@ -148,6 +150,8 @@ extern "C" {
 #define I2C1_MasterSendBlock_METHOD_ENABLED /*!< MasterSendBlock method of the component I2C1 is enabled (generated) */
 #define I2C1_MasterReceiveBlock_METHOD_ENABLED /*!< MasterReceiveBlock method of the component I2C1 is enabled (generated) */
 #define I2C1_SelectSlaveDevice_METHOD_ENABLED /*!< SelectSlaveDevice method of the component I2C1 is enabled (generated) */
+#define I2C1_GetError_METHOD_ENABLED   /*!< GetError method of the component I2C1 is enabled (generated) */
+#define I2C1_CheckBus_METHOD_ENABLED   /*!< CheckBus method of the component I2C1 is enabled (generated) */
 
 /* Events configuration constants - generated for all enabled component's events */
 #define I2C1_OnMasterBlockSent_EVENT_ENABLED /*!< OnMasterBlockSent event of the component I2C1 is enabled (generated) */
@@ -327,6 +331,55 @@ LDD_TError I2C1_MasterReceiveBlock(LDD_TDeviceData *DeviceDataPtr, LDD_TData *Bu
 */
 /* ===================================================================*/
 LDD_TError I2C1_SelectSlaveDevice(LDD_TDeviceData *DeviceDataPtr, LDD_I2C_TAddrType AddrType, LDD_I2C_TAddr Addr);
+
+/*
+** ===================================================================
+**     Method      :  I2C1_GetError (component I2C_LDD)
+*/
+/*!
+**     @brief
+**         Returns value of error mask, e.g. LDD_I2C_ARBIT_LOST.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by <Init> method.
+**     @param
+**         ErrorMaskPtr    - Pointer to a variable
+**                           where errors value mask will be stored.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_DISABLED -  Device is disabled
+**                           ERR_SPEED - This device does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError I2C1_GetError(LDD_TDeviceData *DeviceDataPtr, LDD_I2C_TErrorMask *ErrorMaskPtr);
+
+/*
+** ===================================================================
+**     Method      :  I2C1_CheckBus (component I2C_LDD)
+*/
+/*!
+**     @brief
+**         This method returns the status of the bus. If the START
+**         condition has been detected, the method returns LDD_I2C_BUSY.
+**         If the STOP condition has been detected, the method returns
+**         LDD_I2C_IDLE.
+**     @param
+**         DeviceDataPtr   - Device data structure
+**                           pointer returned by <Init> method.
+**     @param
+**         BusStatePtr     - Pointer to a variable,
+**                           where value of status is stored.
+**     @return
+**                         - Error code, possible codes:
+**                           ERR_OK - OK
+**                           ERR_DISABLED -  Device is disabled
+**                           ERR_SPEED - This device does not work in
+**                           the active clock configuration
+*/
+/* ===================================================================*/
+LDD_TError I2C1_CheckBus(LDD_TDeviceData *DeviceDataPtr, LDD_I2C_TBusState *BusStatePtr);
 
 /*
 ** ===================================================================

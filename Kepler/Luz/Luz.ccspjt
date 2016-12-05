@@ -1,0 +1,24 @@
+[PROJECT]
+Target=Luz.hex
+Processor_Text=PIC16F877A
+CCSVerions=5.015
+Compiler=PCM
+CCSVersion=5.015
+[Target Data]
+FileList=Luz.c
+[Directories]
+Include=C:\Program Files (x86)\PICC\Devices\;C:\Program Files (x86)\PICC\Drivers\
+[C:\Users\Administrador\Desktop\Programación\Instrumentacion\Luz\Luz]
+Type=4
+[mru-list]
+1=Luz.c
+[Opened Files]
+1=Luz.c
+2=..\LDR karen\LDRM.c
+3=
+4=
+[Luz.c]
+Type=4
+[Units]
+Count=1
+1=Luz (main)

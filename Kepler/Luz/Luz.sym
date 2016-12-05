@@ -1,0 +1,106 @@
+004-005 @WRITE_PROGRAM_MEMORY8.P1
+004-005 @READ_PROGRAM_MEMORY8.P2
+008     PSP_DATA
+015     CCP_1_LOW
+015     CCP_1
+016     CCP_1_HIGH
+01B     CCP_2
+01B     CCP_2_LOW
+01C     CCP_2_HIGH
+020-021 luzAdc
+022     conversion
+023     constante
+024-025 lumens
+026     @TRIS_C
+027-028 @PRINTF_LU_9600_62_63.P1
+027-02A @SFTOI.P2
+027     main.@SCRATCH1
+028     main.@SCRATCH2
+029     main.@SCRATCH3
+029     @PRINTF_LU_9600_62_63.@SCRATCH1
+02A     main.@SCRATCH4
+02A     @PRINTF_LU_9600_62_63.@SCRATCH2
+02B-02E @MULFF.P1
+02B-02C @ITOF.P2
+02B-02E @ADDFF.P3
+02B-02E @DIVFF.P4
+02B     @PRINTF_LU_9600_62_63.@SCRATCH3
+02C     @PRINTF_LU_9600_62_63.@SCRATCH4
+02D     @PRINTF_LU_9600_62_63.@SCRATCH5
+02E     @PRINTF_LU_9600_62_63.@SCRATCH6
+02F-032 @DIVFF.P1
+02F-032 @ADDFF.P2
+02F-032 @MULFF.P3
+02F     @PRINTF_LU_9600_62_63.@SCRATCH7
+033     @DIVFF.@SCRATCH1
+033     @MULFF.@SCRATCH1
+033     @ADDFF.@SCRATCH1
+034     @DIVFF.@SCRATCH2
+034     @MULFF.@SCRATCH2
+034     @ADDFF.@SCRATCH2
+035     @DIVFF.@SCRATCH3
+035     @MULFF.@SCRATCH3
+035     @ADDFF.@SCRATCH3
+036     @DIVFF.@SCRATCH4
+036     @MULFF.@SCRATCH4
+036     @ADDFF.@SCRATCH4
+037     @DIVFF.@SCRATCH5
+037     @MULFF.@SCRATCH5
+037     @ADDFF.@SCRATCH5
+038     @DIVFF.@SCRATCH6
+038     @ADDFF.@SCRATCH6
+039     @ADDFF.@SCRATCH7
+03A     @ADDFF.@SCRATCH8
+077     @SCRATCH
+078     @SCRATCH
+078     _RETURN_
+079     @SCRATCH
+07A     @SCRATCH
+09C.6   C1OUT
+09C.7   C2OUT
+10D-10E @WRITE_PROGRAM_MEMORY8.P1
+10D-10E @READ_PROGRAM_MEMORY8.P2
+
+ROM Allocation:
+000004  @ITOF
+000021  @DIVFF
+0000ED  @MULFF
+000164  @ADDFF
+0002A7  @SFTOI
+0002C8  @PRINTF_LU_9600_62_63
+000323  main
+000323  @cinit1
+00033A  @cinit2
+
+Project Directory:
+    C:\Users\Administrador\Desktop\Programación\Instrumentacion\Luz\
+
+Project Files:
+    Luz.c                                                   [28-nov-16 21:53  CRC=8F21D7DD]
+    Luz.h                                                   [24-oct-16 19:43  CRC=2EB8624F]
+    ..\..\..\..\..\..\Program Files (x86)\PICC\Devices\16F877A.h [12-nov-13 13:35  CRC=81334808]
+
+Source signature=C040CA3C
+
+Units:
+    Luz (main)
+
+Compiler Settings:
+    Processor:      PIC16F877A
+    Pointer Size:   16
+    ADC Range:      0-65535
+    Opt Level:      9
+    Short,Int,Long: UNSIGNED: 1,8,16
+    Float,Double:   32,32
+
+Output Files:
+    XREF file:   Luz.xsym
+    Errors:      Luz.err
+    Ext Symbols: Luz.esym
+    INHX8:       Luz.hex
+    Symbols:     Luz.sym
+    List:        Luz.lst
+    Debug/COFF:  Luz.cof
+    Project:     Luz.ccspjt
+    Call Tree:   Luz.tre
+    Statistics:  Luz.STA

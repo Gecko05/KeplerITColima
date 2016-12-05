@@ -1,0 +1,11 @@
+읕Luz
+   읕main  0/188  Ram=4
+      쳐@cinit1  (Inline)  Ram=0
+      쳐@ITOF  0/29  Ram=2
+      쳐@DIVFF  0/204  Ram=14
+      쳐@ITOF  0/29  Ram=2
+      쳐@MULFF  0/119  Ram=13
+      쳐@ITOF  0/29  Ram=2
+      쳐@ADDFF  0/323  Ram=16
+      쳐@SFTOI  0/33  Ram=4
+      읕@PRINTF_LU_9600_62_63  0/91  Ram=9

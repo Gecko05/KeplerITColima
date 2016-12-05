@@ -1,0 +1,84 @@
+CCS PCM C Compiler, Version 5.015, 5967               24-oct-16 20:26
+
+               Filename:   C:\Users\Administrador\Desktop\Programación\Instrumentacion\LDR\LDR.lst
+
+               ROM used:   28 words (0%)
+                           Largest free fragment is 2048
+               RAM used:   5 (1%) at main() level
+                           5 (1%) worst case
+               Stack used: 0 locations
+               Stack size: 8
+
+*
+0000:  MOVLW  00
+0001:  MOVWF  0A
+0002:  GOTO   004
+0003:  NOP
+.................... #include <16F877A.h> 
+.................... //////////// Standard Header file for the PIC16F877A device //////////////// 
+.................... /////////////////////////////////////////////////////////////////////////// 
+.................... ////        (C) Copyright 1996, 2013 Custom Computer Services          //// 
+.................... //// This source code may only be used by licensed users of the CCS C  //// 
+.................... //// compiler.  This source code may only be distributed to other      //// 
+.................... //// licensed users of the CCS C compiler.  No other use, reproduction //// 
+.................... //// or distribution is permitted without written permission.          //// 
+.................... //// Derivative programs created using this software in object code    //// 
+.................... //// form are not restricted in any way.                               //// 
+.................... /////////////////////////////////////////////////////////////////////////// 
+.................... #device PIC16F877A 
+....................  
+.................... #list 
+....................  
+.................... #device ADC=10 
+.................... #USE standard_io (B) 
+....................  
+.................... #FUSES NOWDT                    //No Watch Dog Timer 
+.................... #FUSES XT                       //Crystal osc <= 4mhz for PCM/PCH , 3mhz to 10 mhz for PCD 
+.................... #FUSES NOPUT                    //No Power Up Timer 
+.................... #FUSES NOPROTECT                //Code not protected from reading 
+.................... #FUSES NODEBUG                  //No Debug mode for ICD 
+.................... #FUSES NOBROWNOUT               //No brownout reset 
+.................... #FUSES NOLVP                    //No low voltage prgming, B3(PIC16) or B5(PIC18) used for I/O 
+.................... #FUSES NOCPD                    //No EE protection 
+.................... #FUSES NOWRT     
+.................... #use delay(crystal=4MHz) 
+.................... //#use rs232(baud=9600,parity=N,xmit=PIN_C6,rcv=PIN_C7,bits=8) 
+....................  
+.................... #define espera 300     // Constante para delay espera 
+.................... #define pinLed PIN_B0  // Sirve para activar un LED, RELE.... 
+.................... #define CONTROL 800    // Constante para ajustar según la iluminación de la habitación 
+....................                        // con iluminación de la lampara Vout medido es de 4voltios (+/-) 
+....................                        // 4V corresponden con binSensor = 818 
+....................                         
+.................... void main(){ 
+0004:  MOVF   03,W
+0005:  ANDLW  1F
+0006:  MOVWF  03
+0007:  BSF    03.5
+0008:  BSF    1F.0
+0009:  BSF    1F.1
+000A:  BSF    1F.2
+000B:  BCF    1F.3
+000C:  MOVLW  07
+000D:  MOVWF  1C
+000E:  BCF    03.7
+....................    setup_adc_ports(AN0);            //  Configuramos RA0 como pin Analógico 
+000F:  BCF    1F.0
+0010:  BSF    1F.1
+0011:  BSF    1F.2
+0012:  BSF    1F.3
+....................    setup_adc(ADC_CLOCK_INTERNAL);   // Reloj R-C 
+0013:  BCF    1F.6
+0014:  BCF    03.5
+0015:  BSF    1F.6
+0016:  BSF    1F.7
+0017:  BSF    03.5
+0018:  BSF    1F.7
+0019:  BCF    03.5
+001A:  BSF    1F.0
+....................  
+.................... } 
+001B:  SLEEP
+
+Configuration Fuses:
+   Word  1: 3F39   XT NOWDT NOPUT NOBROWNOUT NOLVP NOCPD NOWRT NODEBUG NOPROTECT

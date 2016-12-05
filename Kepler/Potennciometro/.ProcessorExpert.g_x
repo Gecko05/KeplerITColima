@@ -1,0 +1,64 @@
+<CodeGenerationInfo>
+  <ToolchainSettings>
+    <option>
+      <name>PE_G_4PEx_ToolChain_Compiler_SearchUserPaths</name>
+      <values lines_count="4">
+        <Line>"${ProcessorExpertPath}/lib/Kinetis/iofiles"</Line>
+        <Line>"${ProcessorExpertPath}/lib/Kinetis/pdd/inc"</Line>
+        <Line>"${ProjDirPath}/Sources"</Line>
+        <Line>"${ProjDirPath}/Generated_Code"</Line>
+      </values>
+    </option>
+  </ToolchainSettings>
+  <GeneratedFilesList>
+    <GeneratedByPE>
+      <File Name="Documentation/doxygen/pex.doxyfile" FileDate="2016-10-27, 20:34:03" FileAge="1477618443185" FileType="45637" />
+      <File Name="Generated_Code/AD1.h" FileDate="2016-10-27, 20:36:30" FileAge="1477618590076" FileType="45637" />
+      <File Name="Project_Settings/Debugger/MKL46Z256.mem" FileDate="2016-10-27, 20:34:03" FileAge="1477618443180" FileType="45637" />
+      <File Name="Documentation/doxygen/AdcLdd1.txt" FileDate="2016-10-27, 20:36:30" FileAge="1477618590078" FileType="45637" />
+      <File Name="Generated_Code/AD1.c" FileDate="2016-10-27, 20:36:30" FileAge="1477618590074" FileType="45637" />
+      <File Name="Documentation/doxygen/ExtIntLdd1.txt" FileDate="2016-10-27, 21:28:18" FileAge="1477621698344" FileType="45637" />
+      <File Name="Sources/ProcessorExpert.c" FileDate="2016-11-02, 13:40:51" FileAge="1478115651602" FileType="128" />
+      <File Name="Generated_Code/ExtIntLdd1.h" FileDate="2016-10-27, 21:28:18" FileAge="1477621698320" FileType="45637" />
+      <File Name="Documentation/doxygen/BitIoLdd1.txt" FileDate="2016-10-27, 21:26:32" FileAge="1477621592204" FileType="45637" />
+      <File Name="Generated_Code/ExtIntLdd1.c" FileDate="2016-10-27, 21:28:18" FileAge="1477621698331" FileType="45637" />
+      <File Name="Documentation/doxygen/RoutingReport.txt" FileDate="2016-10-27, 20:34:03" FileAge="1477618443190" FileType="45637" />
+      <File Name="Documentation/doxygen/ASerialLdd1.txt" FileDate="2016-10-27, 20:57:23" FileAge="1477619843966" FileType="45637" />
+      <File Name="Generated_Code/PE_Const.h" FileDate="2016-10-27, 20:34:03" FileAge="1477618443214" FileType="45637" />
+      <File Name="Generated_Code/PE_Types.h" FileDate="2016-10-27, 21:26:32" FileAge="1477621592300" FileType="45637" />
+      <File Name="Generated_Code/PE_Error.h" FileDate="2016-10-27, 20:34:03" FileAge="1477618443218" FileType="45637" />
+      <File Name="Project_Settings/Linker_Files/ProcessorExpert.ld" FileDate="2016-10-27, 20:34:03" FileAge="1477618443159" FileType="8" />
+      <File Name="Generated_Code/IO_Map.h" FileDate="2016-10-27, 20:34:03" FileAge="1477618443209" FileType="45637" />
+      <File Name="Generated_Code/ASerialLdd1.h" FileDate="2016-10-27, 20:57:23" FileAge="1477619843973" FileType="45637" />
+      <File Name="Generated_Code/EInt1.h" FileDate="2016-10-27, 21:28:18" FileAge="1477621698299" FileType="45637" />
+      <File Name="Generated_Code/Term1.h" FileDate="2016-10-27, 20:57:23" FileAge="1477619843957" FileType="45637" />
+      <File Name="Generated_Code/BitIoLdd1.h" FileDate="2016-10-27, 21:26:32" FileAge="1477621592207" FileType="45637" />
+      <File Name="Generated_Code/ASerialLdd1.c" FileDate="2016-10-27, 20:57:23" FileAge="1477619843969" FileType="45637" />
+      <File Name="Generated_Code/EInt1.c" FileDate="2016-10-27, 21:28:18" FileAge="1477621698290" FileType="45637" />
+      <File Name="Generated_Code/Term1.c" FileDate="2016-10-27, 20:57:23" FileAge="1477619843953" FileType="45637" />
+      <File Name="Generated_Code/BitIoLdd1.c" FileDate="2016-10-27, 21:26:32" FileAge="1477621592205" FileType="45637" />
+      <File Name="Generated_Code/AdcLdd1.h" FileDate="2016-10-27, 20:36:30" FileAge="1477618590082" FileType="45637" />
+      <File Name="Generated_Code/Cpu.h" FileDate="2016-10-27, 21:28:18" FileAge="1477621698361" FileType="45637" />
+      <File Name="Generated_Code/AdcLdd1.c" FileDate="2016-10-27, 20:36:30" FileAge="1477618590080" FileType="45637" />
+      <File Name="Documentation/ProcessorExpert.txt" FileDate="2016-10-27, 21:26:32" FileAge="1477621592446" FileType="3072" />
+      <File Name="Generated_Code/Cpu.c" FileDate="2016-10-27, 21:28:18" FileAge="1477621698375" FileType="45637" />
+      <File Name="Sources/Events.h" FileDate="2016-10-27, 21:26:32" FileAge="1477621592397" FileType="131328" />
+      <File Name="Documentation/ProcessorExpert_SIGNALS.txt" FileDate="2016-12-04, 21:03:14" FileAge="1480906994159" FileType="3072" />
+      <File Name="Generated_Code/PTC.h" FileDate="2016-10-27, 21:28:18" FileAge="1477621698269" FileType="45637" />
+      <File Name="Documentation/ProcessorExpert_Settings.xml" FileDate="2016-10-27, 21:28:18" FileAge="1477621698441" FileType="3072" />
+      <File Name="Documentation/doxygen/ProcessorExpert.txt" FileDate="2016-10-27, 21:26:32" FileAge="1477621592363" FileType="45637" />
+      <File Name="Sources/Events.c" FileDate="2016-11-02, 12:53:07" FileAge="1478112787845" FileType="131328" />
+      <File Name="Generated_Code/PTC.c" FileDate="2016-10-27, 21:28:18" FileAge="1477621698256" FileType="45637" />
+      <File Name="Generated_Code/Bit1.h" FileDate="2016-10-27, 21:26:32" FileAge="1477621592202" FileType="45637" />
+      <File Name="Documentation/doxygen/PTC.txt" FileDate="2016-10-27, 21:28:18" FileAge="1477621698350" FileType="45637" />
+      <File Name="Generated_Code/PE_LDD.h" FileDate="2016-10-27, 21:26:32" FileAge="1477621592380" FileType="45637" />
+      <File Name="Generated_Code/Vectors.c" FileDate="2016-10-27, 21:28:18" FileAge="1477621698393" FileType="45637" />
+      <File Name="Generated_Code/Bit1.c" FileDate="2016-10-27, 21:26:32" FileAge="1477621592200" FileType="45637" />
+      <File Name="Generated_Code/Inhr1.h" FileDate="2016-10-27, 20:57:23" FileAge="1477619843964" FileType="45637" />
+      <File Name="Generated_Code/PE_LDD.c" FileDate="2016-10-27, 21:28:18" FileAge="1477621698385" FileType="45637" />
+      <File Name="Generated_Code/Inhr1.c" FileDate="2016-10-27, 20:57:23" FileAge="1477619843961" FileType="45637" />
+      <File Name="Documentation/doxygen/pex.css" FileDate="2016-10-27, 20:34:02" FileAge="1477618442926" FileType="16384" />
+    </GeneratedByPE>
+  </GeneratedFilesList>
+  <CodeGenReference>8</CodeGenReference>
+</CodeGenerationInfo>
